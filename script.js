@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const locationField = document.getElementById('location');
   const referenceSelect = document.getElementById('reference');
   const exitBtn = document.getElementById('exitBtn');
+  const timeslotSelect = document.getElementById('timeslot');
 
   // 1️⃣ लोकेशन मिळवणे
   locBtn.addEventListener('click', () => {
@@ -77,6 +78,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const selectedOption = referenceSelect.options[referenceSelect.selectedIndex];
     const coordinatorMobile = selectedOption ? selectedOption.getAttribute('data-mobile') : '';
+    
+    // ✅ timeslot चे Label फील्डमध्ये जोडणे
+    const timeslotLabel = timeslotSelect.options[timeslotSelect.selectedIndex]?.textContent || '';
+    data.timeslotLabel = timeslotLabel;
 
     // ✅ UPDATED SCRIPT_URL (Google Apps Script)
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxC0VqwFA4Bm8dszZytkhTCVSlQwrpZ9lZkKe7CrX10Rid62NqzK2JOeDiXnNTVIa_mSg/exec';
