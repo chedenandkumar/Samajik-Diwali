@@ -78,7 +78,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const selectedOption = referenceSelect.options[referenceSelect.selectedIndex];
     const coordinatorMobile = selectedOption ? selectedOption.getAttribute('data-mobile') : '';
 
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyMkT_IsaX44WrZFgh-ntH6EK5jCx6ZlMwCHv_6VrYFO4tNQd54bdg6foFjPUIq9C8/exec';
+    // ✅ UPDATED SCRIPT_URL (Google Apps Script)
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxC0VqwFA4Bm8dszZytkhTCVSlQwrpZ9lZkKe7CrX10Rid62NqzK2JOeDiXnNTVIa_mSg/exec';
     const bodyData = new URLSearchParams(data).toString();
 
     fetch(SCRIPT_URL, {
