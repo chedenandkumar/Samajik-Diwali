@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const exitBtn = document.getElementById('exitBtn');
   const timeslotSelect = document.getElementById('timeslot');
   const qrCodeImg = document.getElementById('qrCodeImg');
+  const dateInput = document.getElementById('date');
 
   // लोकेशन मिळवणे
   locBtn.addEventListener('click', () => {
@@ -51,7 +52,31 @@ document.addEventListener('DOMContentLoaded', function () {
     })
     .catch(err => console.error('संयोजक लोड करताना त्रुटी:', err));
 
-  // फॉर्म सबमिशन
+  // तारीख व वेळेचा स्लॉट निवडणे
+  const SLOTS = [
+    { label: "08:00 AM - 10:00 AM", start: "08:00" },
+    { label: "10:00 AM - 12:00 PM", start: "10:00" },
+    { label: "12:00 PM - 02:00 PM", start: "12:00" },
+    { label: "02:00 PM - 04:00 PM", start: "14:00" },
+    { label: "04:00 PM - 06:00 PM", start: "16:00" },
+    { label: "05:00 PM - 07:00 PM", start: "17:00" }
+  ];
+  dateInput.addEventListener('change', function () {
+    timeslotSelect.innerHTML = '<option value="">-- वेळ निवडा --</option>';
+    if (!this.value) {
+      timeslotSelect.disabled = true;
+      return;
+    }
+    timeslotSelect.disabled = false;
+    SLOTS.forEach(slot => {
+      const opt = document.createElement('option');
+      opt.value = slot.start;
+      opt.textContent = slot.label;
+      timeslotSelect.appendChild(opt);
+    });
+  });
+
+  // फॉर्म सबमिट करणे
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     successMsg.style.display = 'none';
@@ -65,10 +90,12 @@ document.addEventListener('DOMContentLoaded', function () {
     formData.forEach((value, key) => {
       data[key] = value;
     });
-    // तारीख व वेळेचा label पाठवा
+
+    // तारीख व वेळेचा स्लॉट पाठवा
     data.date = document.getElementById('date').value || "";
     data.timeslotLabel = timeslotSelect.options[timeslotSelect.selectedIndex]?.textContent || "";
-    // UPDATED SCRIPT_URL (Google Apps Script)
+
+    // Google Apps Script वेब अ‍ॅप URL
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxC0VqwFA4Bm8dszZytkhTCVSlQwrpZ9lZkKe7CrX10Rid62NqzK2JOeDiXnNTVIa_mSg/exec';
     const bodyData = new URLSearchParams(data).toString();
     fetch(SCRIPT_URL, {
