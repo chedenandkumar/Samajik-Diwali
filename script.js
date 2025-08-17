@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
       data[key] = value;
     });
 
-    // तारीख व वेळेचा स्लॉट पाठवा
+    // ✅ तारीख व वेळेचा स्लॉट पाठवा
     data.date = document.getElementById('date').value || "";
     data.timeslotLabel = timeslotSelect.options[timeslotSelect.selectedIndex]?.textContent || "";
 
