@@ -1,0 +1,22 @@
+{
+  "name": "डोनर फॉर्म",
+  "short_name": "डोनरफॉर्म",
+  "lang": "mr",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#f6f8fb",
+  "theme_color": "#0a74da",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
