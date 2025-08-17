@@ -65,9 +65,9 @@ document.addEventListener('DOMContentLoaded', function () {
     formData.forEach((value, key) => {
       data[key] = value;
     });
-    // timeslotLabel जोडणे
-    const timeslotLabel = timeslotSelect.options[timeslotSelect.selectedIndex]?.textContent || '';
-    data.timeslotLabel = timeslotLabel;
+    // तारीख व वेळेचा label पाठवा
+    data.date = document.getElementById('date').value || "";
+    data.timeslotLabel = timeslotSelect.options[timeslotSelect.selectedIndex]?.textContent || "";
     // UPDATED SCRIPT_URL (Google Apps Script)
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxC0VqwFA4Bm8dszZytkhTCVSlQwrpZ9lZkKe7CrX10Rid62NqzK2JOeDiXnNTVIa_mSg/exec';
     const bodyData = new URLSearchParams(data).toString();
@@ -115,7 +115,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // QR कोडवर क्लिक – UPI Intent/Confirm
   qrCodeImg.addEventListener('click', function () {
     if (confirm('आपण उपक्रमासाठी आर्थिक स्वरूपात मदत करू इच्छिता का?')) {
-      // Hoay: UPI Intent लिंक ओपन करा (तुमचा UPI आयडी घाला)
       window.location.href = "upi://pay?pa=your_upi_id@okicici&pn=Jagar Foundation&am=100";
     } else {
       document.getElementById('submitBtn').focus();
