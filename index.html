@@ -4,8 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>रद्दी संकलन माहिती फॉर्म</title>
-
-  <!-- PWA / Manifest -->
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#57d0c3" />
   <meta name="mobile-web-app-capable" content="yes" />
@@ -39,31 +37,8 @@
     .error { background:#fff1f0; color:#7a1b1b; padding:10px;border-radius:8px;margin-bottom:12px;display:none; }
     .actions { display:flex; gap:10px; margin-top:16px; }
     .qr-section { text-align:center; margin-top:20px; }
-    .qr-section img { max-width:200px; border:1px solid #ccc; border-radius:8px; }
+    .qr-section img { max-width:200px; border:1px solid #ccc; border-radius:8px; cursor:pointer;}
     .thankyou { display:none; text-align:center; background:#e6ffef; color:#046733; padding:15px; border-radius:8px; margin-top:20px; font-size:1rem; position:relative; }
-
-    /* TOP/BOTTOM color strips and footer */
-    .color-strip { height:8px; width:100%; background:#57d0c3; display:block; }
-    footer.bottom { text-align:center; padding:12px 10px; color:#fff; background:#57d0c3; border-radius:0 0 12px 12px; margin-top:14px; font-weight:600; }
-
-    /* Date + time single-line layout */
-    .date-time-row {
-      display:flex;
-      gap:8px;
-      align-items:flex-end;
-    }
-    .date-time-row > div:first-child { flex:0 0 45%; }
-    .date-time-row > div:last-child { flex:1; }
-    .date-time-row label { margin-bottom:6px; display:block; }
-
-    @media (max-width:520px){
-      .col-2 { flex-basis:100%; }
-      header img { height:42px; }
-      .date-time-row { flex-wrap:wrap; }
-      .date-time-row > div { flex-basis:100% !important; }
-    }
-
-    /* Exit button style for thankyou */
     .thankyou .exit-thankyou-btn {
       margin-top:16px;
       background:#0a74da;
@@ -75,25 +50,36 @@
       cursor:pointer;
       display:inline-block;
     }
+    .color-strip { height:8px; width:100%; background:#57d0c3; display:block; }
+    footer.bottom { text-align:center; padding:12px 10px; color:#fff; background:#57d0c3; border-radius:0 0 12px 12px; margin-top:14px; font-weight:600; }
+    .date-time-row {
+      display:flex;
+      gap:8px;
+      align-items:flex-end;
+    }
+    .date-time-row > div:first-child { flex:0 0 45%; }
+    .date-time-row > div:last-child { flex:1; }
+    .date-time-row label { margin-bottom:6px; display:block; }
+    @media (max-width:520px){
+      .col-2 { flex-basis:100%; }
+      header img { height:42px; }
+      .date-time-row { flex-wrap:wrap; }
+      .date-time-row > div { flex-basis:100% !important; }
+    }
   </style>
 </head>
 <body>
-  <!-- TOP color strip -->
   <div class="color-strip" aria-hidden="true"></div>
-
   <header>
     <img src="logo.png" alt="Logo">
     <h1>रद्दी संकलनातून सामाजिक दिवाळी 2025</h1>
   </header>
-
   <main class="container" role="main">
     <p class="lead">उपक्रमाकरीता आपल्याकडील वर्तमान पत्राची रद्दी दान करावयाची असल्यास खालील माहिती भरा.</p>
-
     <div id="messages">
       <div id="success" class="success" role="status">🙏 रद्दी संकलनाकरीता आपण दिलेल्या वेळेत लवकरच जागर फाउंडेशनचे संयोजक तुमच्याशी संपर्क साधतील. सहकार्याबद्दल मन:पूर्वक आभार!</div>
       <div id="error" class="error" role="alert">⚠️ कृपया सर्व फील्ड तपासा.</div>
     </div>
-
     <form id="main-form" autocomplete="on" novalidate>
       <div class="row col-full">
         <div style="flex:1">
@@ -101,14 +87,12 @@
           <input id="name" name="name" type="text" required placeholder="नाव..." />
         </div>
       </div>
-
       <div class="row col-full">
         <div style="flex:1">
           <label for="address">पत्ता</label>
           <textarea id="address" name="address" placeholder="(गांव/रोड/बिल्डिंग)" required></textarea>
         </div>
       </div>
-
       <div class="row">
         <div class="col-2">
           <label for="location">शक्य असल्यास लोकेशन शेअर करा.</label>
@@ -117,19 +101,16 @@
             <input id="location" name="location" type="text" placeholder="← चिन्हावर टच करा" readonly />
           </div>
         </div>
-
         <div class="col-2">
           <label for="mobile">मोबाईल नंबर</label>
           <input id="mobile" name="mobile" type="tel" inputmode="numeric" maxlength="10" pattern="[0-9]{10}" autocomplete="tel" placeholder="98*******" required />
         </div>
       </div>
-
       <div class="row">
         <div class="col-2">
           <label for="waste">रद्दी (किलो)</label>
           <input id="waste" name="waste" type="number" min="0" step="1" placeholder="उदा. 25" required />
         </div>
-
         <div class="col-2">
           <label for="datetime">तारीख व वेळ</label>
           <input id="datetime" name="datetime" type="datetime-local" required style="display:none;" />
@@ -145,7 +126,6 @@
           </div>
         </div>
       </div>
-
       <div class="row col-full">
         <div style="flex:1">
           <label for="reference">संयोजक</label>
@@ -154,31 +134,24 @@
           </select>
         </div>
       </div>
-
       <div class="qr-section">
         <p>देणगीसाठी QR कोड स्कॅन करा:</p>
-        <img src="qr-code.png" alt="QR Code">
+        <img src="qr-code.png" alt="QR Code" id="qrCodeImg">
       </div>
-
       <div class="actions">
         <button id="submitBtn" type="submit">सबमिट करा</button>
         <button id="exitBtn" type="button" style="display:none;">बाहेर पडा</button>
       </div>
     </form>
-
     <div class="thankyou" id="thankyouMessage">
       🙏 तुमच्या सहकार्याबद्दल आभार!
-      <!-- ✅ इथे Exit button जोडले आहे  -->
       <br>
       <button id="thankyouExitBtn" class="exit-thankyou-btn" type="button">बाहेर पडा</button>
     </div>
   </main>
-
   <div class="color-strip" aria-hidden="true"></div>
   <footer class="bottom">@जागर फाउंडेशन</footer>
-
   <script src="script.js" defer></script>
-
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const SLOTS = [
@@ -189,11 +162,9 @@
         { label: "04:00 PM - 06:00 PM", start: "16:00" },
         { label: "05:00 PM - 07:00 PM", start: "17:00" }
       ];
-
       const dateInput = document.getElementById('date');
       const timeslotSelect = document.getElementById('timeslot');
       const datetimeHidden = document.getElementById('datetime');
-
       dateInput.addEventListener('change', function () {
         timeslotSelect.innerHTML = '<option value="">-- वेळ निवडा --</option>';
         if (!this.value) {
@@ -209,7 +180,6 @@
           timeslotSelect.appendChild(opt);
         });
       });
-
       timeslotSelect.addEventListener('change', function () {
         if (!this.value || !dateInput.value) {
           datetimeHidden.value = '';
@@ -217,8 +187,7 @@
         }
         datetimeHidden.value = dateInput.value + 'T' + this.value;
       });
-
-      // ✅ Exit बटण - "thankyou" message बंद करण्यासाठी
+      // Exit बटण - "thankyou" message बंद करण्यासाठी
       const thankyouExitBtn = document.getElementById('thankyouExitBtn');
       const thankyouMessage = document.getElementById('thankyouMessage');
       const mainForm = document.getElementById('main-form');
