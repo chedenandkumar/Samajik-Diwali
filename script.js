@@ -65,9 +65,6 @@ document.addEventListener('DOMContentLoaded', function () {
     formData.forEach((value, key) => {
       data[key] = value;
     });
-    // waste फील्डच वापरा, quantity वापरू नका
-    // const selectedOption = referenceSelect.options[referenceSelect.selectedIndex];
-    // const coordinatorMobile = selectedOption ? selectedOption.getAttribute('data-mobile') : '';
     // timeslotLabel जोडणे
     const timeslotLabel = timeslotSelect.options[timeslotSelect.selectedIndex]?.textContent || '';
     data.timeslotLabel = timeslotLabel;
