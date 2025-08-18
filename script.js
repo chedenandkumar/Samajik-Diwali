@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', function () {
   const locBtn = document.getElementById('locBtn');
   const locationField = document.getElementById('location');
   const referenceSelect = document.getElementById('reference');
-  const exitBtn = document.getElementById('exitBtn');
   const timeslotSelect = document.getElementById('timeslot');
   const dateInput = document.getElementById('date');
+  const thankyouExitBtn = document.getElementById('thankyouExitBtn');
 
   // संयोजकांची यादी लोड करणे
   const SHEET_URL = 'https://opensheet.elk.sh/1W059r6QUWecU8WY5OdLLybCMkPOPr_K5IXXEETUbrn4/Conveners';
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
     })
     .catch(err => console.error('संयोजक लोड करताना त्रुटी:', err));
 
-  // तारीख व वेळेचा स्लॉट निवडणे
+  // तारीख व वेळेचा स्लॉट निवडणे (15 सप्टेंबर ते 15 ऑक्टोबर 2025 लॉजिक)
   const SLOTS = [
     { label: "08:00 AM - 10:00 AM", start: "08:00" },
     { label: "10:00 AM - 12:00 PM", start: "10:00" },
@@ -49,10 +49,20 @@ document.addEventListener('DOMContentLoaded', function () {
     { label: "04:00 PM - 06:00 PM", start: "16:00" },
     { label: "05:00 PM - 07:00 PM", start: "17:00" }
   ];
+  const minDate = '2025-09-15';
+  const maxDate = '2025-10-15';
+  dateInput.setAttribute('min', minDate);
+  dateInput.setAttribute('max', maxDate);
+
   dateInput.addEventListener('change', function () {
     timeslotSelect.innerHTML = '<option value="">-- वेळ निवडा --</option>';
     if (!this.value) {
       timeslotSelect.disabled = true;
+      return;
+    }
+    if (this.value < minDate || this.value > maxDate) {
+      timeslotSelect.disabled = true;
+      timeslotSelect.innerHTML = '<option value="">तारीख योग्य नाही</option>';
       return;
     }
     timeslotSelect.disabled = false;
@@ -87,10 +97,13 @@ document.addEventListener('DOMContentLoaded', function () {
     errorMsg.style.display = 'none';
     thankyouMessage.style.display = 'none';
 
-    if (!form.checkValidity()) {
-      errorMsg.style.display = 'block'; // बटणाखालीच आहे
+    // तारीख योग्य आहे का?
+    const dateVal = dateInput.value;
+    if (!form.checkValidity() || !dateVal || dateVal < minDate || dateVal > maxDate) {
+      errorMsg.style.display = 'block';
       return;
     }
+    errorMsg.style.display = 'none';
 
     const formData = new FormData(form);
     const data = {};
@@ -99,11 +112,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // तारीख व वेळेचा स्लॉट पाठवा
-    data.date = document.getElementById('date').value || "";
+    data.date = dateInput.value || "";
     data.timeslotLabel = timeslotSelect.options[timeslotSelect.selectedIndex]?.textContent || "";
-
-    // डोनरचा इमेल ऑटोमॅटिक (Apps Script मधून घेणार)
-    data.email = ""; // क्लायंट साइडवर रिकामा, Apps Script मध्ये getEmail() वापरा
 
     // Google Apps Script वेब अ‍ॅप URL
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxC0VqwFA4Bm8dszZytkhTCVSlQwrpZ9lZkKe7CrX10Rid62NqzK2JOeDiXnNTVIa_mSg/exec';
@@ -128,27 +138,12 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   });
 
-  // Exit बटण
-  exitBtn.addEventListener('click', function () {
-    form.reset();
-    form.style.display = 'block';
+  // Thankyou मध्ये Exit बटण
+  thankyouExitBtn.addEventListener('click', function () {
     thankyouMessage.style.display = 'none';
-    successMsg.style.display = 'none';
+    form.style.display = 'block';
+    form.reset();
     errorMsg.style.display = 'none';
-    // आभाराचा संदेश काढला
-  });
-
-  // स्क्रीनशॉट ब्लॉकिंग (केवळ काही ब्राउझर्समध्ये काम करेल)
-  document.addEventListener('keydown', function (e) {
-    if (
-      (e.key === 'PrintScreen') ||
-      (e.ctrlKey && e.key.toLowerCase() === 'p')
-    ) {
-      e.preventDefault();
-      alert("स्क्रीनशॉट घेता येत नाही.");
-    }
-  });
-  document.body.addEventListener('contextmenu', function (e) {
-    e.preventDefault();
+    successMsg.style.display = 'none';
   });
 });
