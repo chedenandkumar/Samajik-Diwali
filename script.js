@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const timeslotSelect = document.getElementById('timeslot');
   const dateInput = document.getElementById('date');
   const thankyouExitBtn = document.getElementById('thankyouExitBtn');
+  const qrPayBtn = document.getElementById('qrPayBtn');
 
   // संयोजकांची यादी लोड करणे
   const SHEET_URL = 'https://opensheet.elk.sh/1W059r6QUWecU8WY5OdLLybCMkPOPr_K5IXXEETUbrn4/Conveners';
@@ -139,11 +140,19 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // Thankyou मध्ये Exit बटण
-  thankyouExitBtn.addEventListener('click', function () {
+  thankyouExitBtn && thankyouExitBtn.addEventListener('click', function () {
     thankyouMessage.style.display = 'none';
     form.style.display = 'block';
     form.reset();
     errorMsg.style.display = 'none';
     successMsg.style.display = 'none';
+  });
+
+  // QR/R-logo बटणवर क्लिक केल्यावर पेमेंट ॲप उघडा
+  qrPayBtn && qrPayBtn.addEventListener('click', function () {
+    // खाली UPI payment URL टाका, उदा. paytm, phonepe, BHIM, GooglePay
+    // उदाहरण (Google Pay): 'upi://pay?pa=YOURUPIID@okicici&pn=Receiver Name&cu=INR'
+    // कृपया तुमचा तपशील टाका:
+    window.location.href = 'upi://pay?pa=YOURUPIID@okicici&pn=SamajikDiwali&cu=INR';
   });
 });
