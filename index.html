@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: 'Noto Sans Devanagari', 'Arial', sans-serif;
-      background: #19aab8 !important;
+      background: #fff;
       margin: 0;
       padding: 0;
     }
@@ -15,7 +15,7 @@
       margin: 0;
       padding: 32px 0 12px 0;
       text-align: center;
-      background: #19aab8 !important;
+      background: #19aab8;
       border-bottom: 1.5px solid #19aab8;
     }
     header h1 {
@@ -38,13 +38,14 @@
       margin-bottom: 8px;
       font-size: 1rem;
       text-align: center;
-      color: #fff;
+      color: #19aab8;
+      font-weight: 500;
     }
     form {
       max-width: 410px;
       margin: 24px auto 0 auto;
       padding: 28px 24px 20px 24px;
-      background: #19aab8 !important;
+      background: #fff;
       border-radius: 12px;
       box-shadow: 0 3px 16px rgba(0,0,60,0.10);
       position: relative;
@@ -55,24 +56,24 @@
       margin-top: 14px;
       font-weight: 500;
       letter-spacing: 0.2px;
-      color: #fff;
+      color: #19aab8;
     }
     input[type="text"], input[type="tel"], textarea, select, input[type="date"] {
       width: 100%;
       font-size: 1rem;
       padding: 7px 8px;
       border-radius: 7px;
-      border: 1.2px solid #fff;
+      border: 1.2px solid #19aab8;
       margin-bottom: 7px;
-      background: #e3fafc;
+      background: #f7fbff;
       transition: border 0.2s;
       box-sizing: border-box;
       color: #15626a;
     }
     input:focus, textarea:focus, select:focus {
-      border-color: #fff;
+      border-color: #19aab8;
       outline: none;
-      background: #d1f3f7;
+      background: #e3fafc;
     }
     textarea {
       min-height: 56px;
@@ -141,15 +142,15 @@
       box-shadow: 0 2px 8px rgba(0,0,60,0.11);
       background: #fff;
       display: inline-block;
-      border: 2px solid #fff;
+      border: 2px solid #19aab8;
       transition: box-shadow 0.2s;
     }
     .qr-section img:hover {
-      box-shadow: 0 4px 16px #fff;
+      box-shadow: 0 4px 16px #19aab8;
       border-color: #15626a;
     }
     button {
-      background: linear-gradient(90deg,#4098ff 35%,#3db8e5 100%);
+      background: #19aab8;
       color: #fff;
       font-weight: 500;
       border: none;
@@ -161,16 +162,16 @@
       transition: background 0.18s;
     }
     button:hover, button:focus {
-      background: linear-gradient(90deg,#326ddd 35%,#00a0e3 100%);
+      background: #15626a;
     }
     #locBtn {
       padding: 7px 14px;
       font-size: 0.99rem;
       margin-right: 7px;
       margin-left: 0;
-      background: linear-gradient(90deg,#ffe18a 60%,#ffd34b 100%);
-      color: #15626a;
-      border: 1px solid #f8da60;
+      background: #19aab8;
+      color: #fff;
+      border: 1px solid #19aab8;
       font-weight: 500;
       border-radius: 6px;
       box-shadow: 0 1px 4px rgba(100,100,180,0.06);
@@ -178,8 +179,18 @@
       order: 0;
     }
     #locBtn:hover {
-      background: linear-gradient(90deg,#ffd34b 55%,#ffe18a 100%);
-      color: #15626a;
+      background: #15626a;
+      color: #fff;
+    }
+    footer {
+      background: #19aab8;
+      color: #fff;
+      text-align: center;
+      padding: 16px 0 12px 0;
+      margin-top: 36px;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+      border-top: 1.5px solid #19aab8;
     }
     @media (max-width:500px) {
       header h1 .headline1, header h1 .headline2 { font-size:1.1rem; }
@@ -232,7 +243,7 @@
       <button type="button" id="qrPayBtn">
         <img src="https://github.com/chedenandkumar/Samajik-Diwali/raw/main/R-logo.png" alt="R Logo" id="qrImage">
       </button>
-      <div style="color:#fff; margin-top:8px; font-size:0.98rem;">रूपये लोगोवर क्लिक करा</div>
+      <div style="color:#19aab8; margin-top:8px; font-size:0.98rem;">रूपये लोगोवर क्लिक करा</div>
     </div>
     <div class="actions">
       <button type="submit" id="submitBtn">सबमिट करा</button>
@@ -244,6 +255,9 @@
       <button type="button" id="thankyouExitBtn">एग्झिट</button>
     </div>
   </div>
+  <footer>
+    © 2025 सामाजिक दिवाळी | सर्व हक्क राखीव
+  </footer>
   <script src="script.js"></script>
 </body>
 </html>
