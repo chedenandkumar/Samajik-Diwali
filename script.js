@@ -8,24 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const referenceSelect = document.getElementById('reference');
   const exitBtn = document.getElementById('exitBtn');
   const timeslotSelect = document.getElementById('timeslot');
-  const qrCodeImg = document.getElementById('qrCodeImg');
   const dateInput = document.getElementById('date');
-
-  // लोकेशन मिळवणे
-  locBtn.addEventListener('click', () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        pos => {
-          const lat = pos.coords.latitude;
-          const lon = pos.coords.longitude;
-          locationField.value = `https://maps.google.com/?q=${lat},${lon}`;
-        },
-        () => alert('लोकेशन मिळवण्यात अडचण आली. कृपया परवानगी द्या.')
-      );
-    } else {
-      alert('तुमचा ब्राउझर लोकेशन सपोर्ट करत नाही.');
-    }
-  });
 
   // संयोजकांची यादी लोड करणे
   const SHEET_URL = 'https://opensheet.elk.sh/1W059r6QUWecU8WY5OdLLybCMkPOPr_K5IXXEETUbrn4/Conveners';
@@ -49,6 +32,11 @@ document.addEventListener('DOMContentLoaded', function () {
         opt.setAttribute('data-mobile', item.mobile);
         referenceSelect.appendChild(opt);
       });
+      // शेवटी 'यापैकी कोणीही नाही अन्य मार्ग'
+      const otherOpt = document.createElement('option');
+      otherOpt.value = 'यापैकी कोणीही नाही अन्य मार्ग';
+      otherOpt.textContent = 'यापैकी कोणीही नाही अन्य मार्ग';
+      referenceSelect.appendChild(otherOpt);
     })
     .catch(err => console.error('संयोजक लोड करताना त्रुटी:', err));
 
@@ -76,24 +64,46 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  // लोकेशन मिळवणे
+  locBtn.addEventListener('click', () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
+          locationField.value = `https://maps.google.com/?q=${lat},${lon}`;
+        },
+        () => alert('लोकेशन मिळवण्यात अडचण आली. कृपया परवानगी द्या.')
+      );
+    } else {
+      alert('तुमचा ब्राउझर लोकेशन सपोर्ट करत नाही.');
+    }
+  });
+
   // फॉर्म सबमिट करणे
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     successMsg.style.display = 'none';
     errorMsg.style.display = 'none';
+    thankyouMessage.style.display = 'none';
+
     if (!form.checkValidity()) {
-      errorMsg.style.display = 'block';
+      errorMsg.style.display = 'block'; // बटणाखालीच आहे
       return;
     }
+
     const formData = new FormData(form);
     const data = {};
     formData.forEach((value, key) => {
       data[key] = value;
     });
 
-    // ✅ तारीख व वेळेचा स्लॉट पाठवा
+    // तारीख व वेळेचा स्लॉट पाठवा
     data.date = document.getElementById('date').value || "";
     data.timeslotLabel = timeslotSelect.options[timeslotSelect.selectedIndex]?.textContent || "";
+
+    // डोनरचा इमेल ऑटोमॅटिक (Apps Script मधून घेणार)
+    data.email = ""; // क्लायंट साइडवर रिकामा, Apps Script मध्ये getEmail() वापरा
 
     // Google Apps Script वेब अ‍ॅप URL
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxC0VqwFA4Bm8dszZytkhTCVSlQwrpZ9lZkKe7CrX10Rid62NqzK2JOeDiXnNTVIa_mSg/exec';
@@ -106,12 +116,8 @@ document.addEventListener('DOMContentLoaded', function () {
       .then(res => res.json().catch(() => ({ success: true })))
       .then(response => {
         if (response.success) {
-          successMsg.style.display = 'block';
           form.style.display = 'none';
           thankyouMessage.style.display = 'block';
-          if (response.whatsappUrl) {
-            window.open(response.whatsappUrl, '_blank');
-          }
         } else {
           throw new Error('सबमिशन अयशस्वी');
         }
@@ -129,22 +135,20 @@ document.addEventListener('DOMContentLoaded', function () {
     thankyouMessage.style.display = 'none';
     successMsg.style.display = 'none';
     errorMsg.style.display = 'none';
+    // आभाराचा संदेश काढला
   });
 
-  // Thankyou मध्ये Exit बटण
-  const thankyouExitBtn = document.getElementById('thankyouExitBtn');
-  thankyouExitBtn.addEventListener('click', function () {
-    thankyouMessage.style.display = 'none';
-    form.style.display = 'block';
-    form.reset();
-  });
-
-  // QR कोडवर क्लिक – UPI Intent/Confirm
-  qrCodeImg.addEventListener('click', function () {
-    if (confirm('आपण उपक्रमासाठी आर्थिक स्वरूपात मदत करू इच्छिता का?')) {
-      window.location.href = "upi://pay?pa=your_upi_id@okicici&pn=Jagar Foundation&am=100";
-    } else {
-      document.getElementById('submitBtn').focus();
+  // स्क्रीनशॉट ब्लॉकिंग (केवळ काही ब्राउझर्समध्ये काम करेल)
+  document.addEventListener('keydown', function (e) {
+    if (
+      (e.key === 'PrintScreen') ||
+      (e.ctrlKey && e.key.toLowerCase() === 'p')
+    ) {
+      e.preventDefault();
+      alert("स्क्रीनशॉट घेता येत नाही.");
     }
+  });
+  document.body.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
   });
 });
