@@ -7,59 +7,71 @@
   <style>
     body {
       font-family: 'Noto Sans Devanagari', 'Arial', sans-serif;
-      background: #f6f7f8;
+      background: #f5f8ff;
       margin: 0;
       padding: 0;
-      -webkit-user-select: none; /* सक्रीनशॉट ब्लॉकिंगच्या सुरुवात */
-      user-select: none;
-      -webkit-touch-callout: none;
     }
     header {
       margin: 0;
-      padding: 24px 0 8px 0;
+      padding: 32px 0 12px 0;
       text-align: center;
-      background: #fff;
+      background: #e3edff; /* पूर्वीचा बॅकग्राउंड रंग */
+      border-bottom: 1.5px solid #bcd2f7;
     }
     header h1 {
       margin: 0;
     }
     .headline1 {
-      font-size: 2rem;
+      font-size: 2.1rem;
       font-weight: bold;
+      color: #11336b;
+      letter-spacing: 1px;
     }
     .headline2 {
-      font-size: 1.2rem;
+      font-size: 1.22rem;
       font-weight: normal;
+      color: #284584;
+      letter-spacing: 0.7px;
     }
     .subtitle {
       margin-top: 8px;
       margin-bottom: 8px;
       font-size: 1rem;
       text-align: center;
+      color: #334370;
     }
     form {
-      max-width: 400px;
-      margin: 12px auto 0 auto; /* अंतर कमी */
-      padding: 24px;
+      max-width: 410px;
+      margin: 24px auto 0 auto;
+      padding: 28px 24px 20px 24px;
       background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      border-radius: 12px;
+      box-shadow: 0 3px 16px rgba(0,0,60,0.10);
       position: relative;
     }
     label {
       display: block;
-      margin-bottom: 4px;
-      margin-top: 12px;
+      margin-bottom: 2px;
+      margin-top: 14px;
       font-weight: 500;
+      letter-spacing: 0.2px;
+      color: #1b2c4b;
     }
-    input[type="text"], input[type="tel"], textarea, select {
+    input[type="text"], input[type="tel"], textarea, select, input[type="date"] {
       width: 100%;
       font-size: 1rem;
       padding: 7px 8px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      margin-bottom: 6px;
+      border-radius: 7px;
+      border: 1.2px solid #bcd2f7;
+      margin-bottom: 7px;
+      background: #f7fbff;
+      transition: border 0.2s;
       box-sizing: border-box;
+    }
+    input:focus, textarea:focus, select:focus {
+      border-color: #4b98ff;
+      outline: none;
+      background: #eff7ff;
     }
     textarea {
       min-height: 56px;
@@ -68,7 +80,7 @@
     .actions {
       display: flex;
       gap: 10px;
-      margin-top: 16px;
+      margin-top: 18px;
       justify-content: center;
     }
     .error {
@@ -76,7 +88,7 @@
       background: #fff0f0;
       border-radius: 5px;
       padding: 6px 10px;
-      margin: 8px 0 0 0;
+      margin: 0 0 4px 0;
       text-align: center;
       display: none;
     }
@@ -95,46 +107,78 @@
     #thankyouMessage {
       display: none;
       border-radius: 6px;
-      padding: 14px;
+      padding: 20px 16px 14px 16px;
       margin: 12px auto 0 auto;
       max-width: 400px;
       text-align: center;
-      font-size: 1.17rem;
+      font-size: 1.14rem;
       font-weight: 500;
-      /* background: none;  -- बॅकग्राऊंड हटवला */
       color: #087c00;
       border: none;
       box-shadow: none;
+      background: none;
     }
-    .hidden {
-      display: none !important;
+    #thankyouActions {
+      margin-top: 14px;
+      text-align: center;
     }
-    /* स्क्रीनशॉट ब्लॉकिंग CSS (फक्त काही ब्राउझरमध्ये काम करेल) */
-    body {
-      -webkit-user-select: none; 
-      user-select: none;
-    }
-    /* QR कोड ऐवजी placeholder */
     .qr-section {
       text-align: center;
-      margin-top: 10px;
-      margin-bottom: 10px;
+      margin-top: 12px;
+      margin-bottom: 12px;
     }
-    .qr-section .placeholder {
-      background: #eee;
-      color: #666;
-      border-radius: 8px;
-      padding: 22px;
-      font-size: 1.1rem;
+    .qr-section img {
+      max-width: 120px;
+      width: 100%;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0,0,60,0.11);
+      background: #fff;
       display: inline-block;
-      margin-bottom: 6px;
-      border: 1px dashed #aaa;
+    }
+    button {
+      background: linear-gradient(90deg,#4098ff 35%,#3db8e5 100%);
+      color: #fff;
+      font-weight: 500;
+      border: none;
+      border-radius: 6px;
+      padding: 7px 19px;
+      font-size: 1.04rem;
+      cursor: pointer;
+      box-shadow: 0 1px 4px rgba(100,100,180,0.07);
+      transition: background 0.18s;
+    }
+    button:hover, button:focus {
+      background: linear-gradient(90deg,#326ddd 35%,#00a0e3 100%);
+    }
+    #locBtn {
+      padding: 7px 14px;
+      font-size: 0.99rem;
+      margin-right: 7px;
+      margin-left: 0;
+      background: linear-gradient(90deg,#ffe18a 60%,#ffd34b 100%);
+      color: #1b2c4b;
+      border: 1px solid #f8da60;
+      font-weight: 500;
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgba(100,100,180,0.06);
+      transition: background 0.18s;
+      order: 0;
+    }
+    #locBtn:hover {
+      background: linear-gradient(90deg,#ffd34b 55%,#ffe18a 100%);
+      color: #11336b;
+    }
+    @media (max-width:500px) {
+      header h1 .headline1, header h1 .headline2 { font-size:1.1rem; }
+      form { padding:14px 4vw 14px 4vw; }
+      #thankyouMessage { padding:12px 4vw 12px 4vw; }
+      .qr-section img { max-width: 70vw; }
     }
   </style>
 </head>
 <body>
   <header>
-    <img src="logo.png" alt="Logo">
+    <img src="logo.png" alt="Logo" style="max-width:80px;">
     <h1>
       <span class="headline1">रद्दी संकलनातून</span><br>
       <span class="headline2">सामाजिक दिवाळी 2025</span>
@@ -154,8 +198,8 @@
 
     <label for="location">लोकेशन (गुगल मॅप लिंक):</label>
     <div style="display: flex; gap: 6px;">
-      <input type="text" id="location" name="location" autocomplete="off" readonly style="flex:1;">
       <button type="button" id="locBtn" style="white-space:nowrap;">लोकेशन मिळवा</button>
+      <input type="text" id="location" name="location" autocomplete="off" readonly style="flex:1;">
     </div>
 
     <label for="mobile">संपर्कासाठी मोबाईल नंबर:</label>
@@ -172,14 +216,18 @@
     <select id="reference" name="reference" required></select>
 
     <div class="qr-section">
-      <span class="placeholder">QR कोडऐवजी इथे इतर माहिती/इमेज/बटण/रिकामी जागा टाकू शकता.</span>
+      <img src="https://images.githubusercontent.com/user-images/chedenandkumar/1.png" alt="रूपये चिन्ह" id="qrImage">
     </div>
     <div class="actions">
       <button type="submit" id="submitBtn">सबमिट करा</button>
-      <button type="button" id="exitBtn">एग्झिट</button>
     </div>
   </form>
-  <div id="thankyouMessage">फॉर्म सबमिट झाला. धन्यवाद!</div>
+  <div id="thankyouMessage">
+    फॉर्म सबमिट झाला. धन्यवाद!
+    <div id="thankyouActions">
+      <button type="button" id="thankyouExitBtn">एग्झिट</button>
+    </div>
+  </div>
   <script src="script.js"></script>
 </body>
 </html>
