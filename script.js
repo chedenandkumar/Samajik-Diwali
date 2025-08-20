@@ -1,292 +1,288 @@
-<!DOCTYPE html>
-<html lang="mr">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>रद्दी संकलनातून सामाजिक दिवाळी 2025</title>
-  <style>
-    body {
-      font-family: 'Noto Sans Devanagari', 'Arial', sans-serif;
-      background: #fff;
-      margin: 0;
-      padding: 0;
-      color: #000; /* By default text color - black */
-    }
-    header {
-      margin: 0;
-      padding: 32px 0 12px 0;
-      text-align: center;
-      background: #19aab8;
-      border-bottom: 1.5px solid #19aab8;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 2.1rem;
-      font-weight: bold;
-      color: #fff;
-      letter-spacing: 1px;
-    }
-    .headline1, .headline2 {
-      font-size: 2.1rem;
-      font-weight: bold;
-      color: #fff;
-      letter-spacing: 1px;
-      display: block;
-    }
-    .subtitle {
-      margin-top: 8px;
-      margin-bottom: 8px;
-      font-size: 1rem;
-      text-align: center;
-      color: #19aab8;
-      font-weight: 500;
-    }
-    form {
-      max-width: 410px;
-      margin: 24px auto 0 auto;
-      padding: 28px 24px 20px 24px;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 3px 16px rgba(0,0,60,0.10);
-      position: relative;
-    }
-    label {
-      display: block;
-      margin-bottom: 2px;
-      margin-top: 14px;
-      font-weight: 500;
-      letter-spacing: 0.2px;
-      color: #19aab8;
-    }
-    input[type="text"], input[type="tel"], textarea, select, input[type="date"] {
-      width: 100%;
-      font-size: 1rem;
-      padding: 7px 8px;
-      border-radius: 7px;
-      border: 1.2px solid #19aab8;
-      margin-bottom: 7px;
-      background: #f7fbff;
-      transition: border 0.2s;
-      box-sizing: border-box;
-      color: #15626a;
-    }
-    input:focus, textarea:focus, select:focus {
-      border-color: #19aab8;
-      outline: none;
-      background: #e3fafc;
-    }
-    textarea {
-      min-height: 56px;
-      resize: vertical;
-    }
-    .actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 18px;
-      justify-content: center;
-    }
-    .error {
-      color: #b40000;
-      background: #fff0f0;
-      border-radius: 5px;
-      padding: 6px 10px;
-      margin: 0 0 4px 0;
-      text-align: center;
-      display: none;
-    }
-    .success {
-      color: #097c00;
-      background: #e6ffe6;
-      border-radius: 6px;
-      padding: 12px;
-      margin: 12px auto 0 auto;
-      max-width: 400px;
-      text-align: center;
-      font-size: 1.13rem;
-      font-weight: 500;
-      display: none;
-    }
-    #thankyouMessage {
-      display: none;
-      border-radius: 6px;
-      padding: 20px 16px 14px 16px;
-      margin: 12px auto 0 auto;
-      max-width: 400px;
-      text-align: center;
-      font-size: 1.14rem;
-      font-weight: 500;
-      color: #087c00;
-      border: none;
-      box-shadow: none;
-      background: none;
-    }
-    #thankyouActions {
-      margin-top: 14px;
-      text-align: center;
-    }
-    .qr-section {
-      text-align: center;
-      margin-top: 12px;
-      margin-bottom: 12px;
-    }
-    .qr-section button {
-      background: none;
-      border: none;
-      padding: 0;
-      cursor: pointer;
-    }
-    .qr-section img {
-      max-width: 120px;
-      width: 100%;
-      border-radius: 50%;
-      box-shadow: none; /* Remove shadow */
-      background: #fff;
-      display: inline-block;
-      border: none; /* Remove border */
-      transition: box-shadow 0.2s;
-    }
-    .qr-section img:hover {
-      box-shadow: none;
-      border-color: none;
-    }
-    button {
-      background: #19aab8;
-      color: #fff;
-      font-weight: 500;
-      border: none;
-      border-radius: 6px;
-      padding: 7px 19px;
-      font-size: 1.04rem;
-      cursor: pointer;
-      box-shadow: 0 1px 4px rgba(100,100,180,0.07);
-      transition: background 0.18s;
-    }
-    button:hover, button:focus {
-      background: #15626a;
-    }
-    #locBtn {
-      padding: 7px 14px;
-      font-size: 0.99rem;
-      margin-right: 7px;
-      margin-left: 0;
-      background: #19aab8;
-      color: #fff;
-      border: 1px solid #19aab8;
-      font-weight: 500;
-      border-radius: 6px;
-      box-shadow: 0 1px 4px rgba(100,100,180,0.06);
-      transition: background 0.18s;
-      order: 0;
-    }
-    #locBtn:hover {
-      background: #15626a;
-      color: #fff;
-    }
-    footer {
-      background: #19aab8;
-      color: #fff;
-      text-align: center;
-      padding: 16px 0 12px 0;
-      margin-top: 36px;
-      font-size: 1rem;
-      letter-spacing: 0.5px;
-      border-top: 1.5px solid #19aab8;
-    }
-    #totalsSection {
-      display: none;
-      margin: 18px auto 0 auto;
-      max-width: 400px;
-      text-align: center;
-      font-size: 1.09rem;
-      color: #15626a;
-      background: #e3fafc;
-      border-radius: 8px;
-      padding: 12px;
-    }
-    @media (max-width:500px) {
-      header h1 { font-size:1.2rem; }
-      .headline1, .headline2 { font-size:1.2rem; }
-      form { padding:14px 4vw 14px 4vw; }
-      #thankyouMessage { padding:12px 4vw 12px 4vw; }
-      .qr-section img { max-width: 70vw; }
-      #totalsSection { font-size:1rem; }
-    }
-  </style>
-  <!-- Google Fonts for Devanagari -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@700&display=swap" rel="stylesheet">
-</head>
-<body>
-  <header>
-    <img src="logo.png" alt="Logo" style="max-width:80px;">
-    <h1>
-      <span class="headline1">रद्दी संकलनातून</span>
-      <span class="headline2">सामाजिक दिवाळी 2025</span>
-    </h1>
-  </header>
-  <div class="subtitle">
-    उपक्रमाकरीता आपल्याकडील वर्तमान पत्राची रद्दी दान करावयाची असल्यास खालील माहिती भरा.
-  </div>
-  <div class="success" id="success">फॉर्म सबमिट झाला. धन्यवाद!</div>
-  <form id="main-form" autocomplete="off">
-    <div class="error" id="error">सर्व फिल्ड्स तपासा</div>
-    <label for="name">नाव:</label>
-    <input type="text" id="name" name="name" required autocomplete="off">
+// CONFIG -- तुमच्या Google Sheet साठी योग्य आयडी/की द्या
+const SHEET_ID = 'YOUR_SHEET_ID_HERE'; // <-- आपला Google Sheet ID
+const API_KEY = 'YOUR_API_KEY_HERE';   // <-- आपला Google Sheets API KEY
+const CONVENERS_TAB = 'Conveners';
+const RESPONSES_TAB = 'Responses';
 
-    <label for="village">गांव:</label>
-    <select id="village" name="village" required>
-      <option value="">गांव निवडा</option>
-      <!-- गाव populate होईल -->
-    </select>
+const villageSelect = document.getElementById('village');
+const referenceSelect = document.getElementById('reference');
+const mainForm = document.getElementById('main-form');
+const errorDiv = document.getElementById('error');
+const successDiv = document.getElementById('success');
+const thankyouMsg = document.getElementById('thankyouMessage');
+const thankyouExitBtn = document.getElementById('thankyouExitBtn');
+const totalsSection = document.getElementById('totalsSection');
+const submitBtn = document.getElementById('submitBtn');
+const wasteInput = document.getElementById('waste');
+const mobileInput = document.getElementById('mobile');
+const dateInput = document.getElementById('date');
+const timeslotSelect = document.getElementById('timeslot');
+const locBtn = document.getElementById('locBtn');
+const locationInput = document.getElementById('location');
+const qrPayBtn = document.getElementById('qrPayBtn');
 
-    <label for="address">पत्ता:</label>
-    <textarea id="address" name="address" rows="2" placeholder="(गांव/रोड/बिल्डिंग)" required></textarea>
+let convenerData = [];
+let villageMap = {};
+let isDateInputEnabled = true;
 
-    <label for="location">माहिती घरून भरत असाल तर तुमचे लोकेशन शेअर करा:</label>
-    <div style="display: flex; gap: 6px;">
-      <button type="button" id="locBtn" style="white-space:nowrap;">लोकेशन मिळवा</button>
-      <input type="text" id="location" name="location" autocomplete="off" readonly style="flex:1;" placeholder="← चिन्हावर टच करा">
-    </div>
+// --- 2. गाव/संयोजक populate ---
+async function fetchConveners() {
+  try {
+    // Google Sheets API - Conveners tab fetch
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${CONVENERS_TAB}?key=${API_KEY}`;
+    const res = await fetch(url);
+    const data = await res.json();
 
-    <label for="mobile">संपर्कासाठी मोबाईल नंबर:</label>
-    <input type="tel" id="mobile" name="mobile" required pattern="^[0-9]{10}$" maxlength="10" autocomplete="off">
+    let rows = data.values || [];
+    rows.shift(); // remove header
+    convenerData = rows.map(r => ({
+      village: r[1],
+      name: r[2],
+      mobile: r[3] || '',
+      info: r[4] || ''
+    }));
 
-    <label for="waste">उपक्रमासाठी उपलब्ध अंदाजे रद्दी किती (किलो):</label>
-    <input type="number" id="waste" name="waste" required min="1" autocomplete="off" inputmode="numeric" pattern="[0-9]*">
+    // गाव - संयोजक map
+    villageMap = {};
+    convenerData.forEach(row => {
+      if (!villageMap[row.village]) villageMap[row.village] = [];
+      villageMap[row.village].push(row);
+    });
 
-    <label for="date">रद्दी संकलित करण्यासाठी तारीख व वेळ सुचवा:</label>
-    <input type="date" id="date" name="date" required>
-    <select id="timeslot" name="timeslot"></select>
+    // गाव populate
+    villageSelect.innerHTML = '<option value="">गांव निवडा</option>';
+    Object.keys(villageMap).sort().forEach(v => {
+      const opt = document.createElement('option');
+      opt.value = v;
+      opt.textContent = v;
+      villageSelect.appendChild(opt);
+    });
 
-    <label for="reference">उपक्रमाची माहिती आपल्यापर्यंत पोहोचवणाऱ्या संयोजकाचे नाव निवडा:</label>
-    <select id="reference" name="reference" required>
-      <option value="">संयोजक निवडा</option>
-      <!-- संयोजक populate होईल -->
-    </select>
+    villageSelect.addEventListener('change', populateReference);
+    populateReference();
 
-    <label for="email">ईमेल (ऑटो):</label>
-    <input type="email" id="email" name="email" autocomplete="email" readonly style="background:#e9ecef;">
+  } catch (err) {
+    errorDiv.style.display = 'block';
+    errorDiv.textContent = 'गाव/संयोजक माहिती मिळवता आली नाही.';
+  }
+}
 
-    <div class="qr-section">
-      <button type="button" id="qrPayBtn">
-        <img src="https://github.com/chedenandkumar/Samajik-Diwali/raw/main/R-logo.png" alt="R Logo" id="qrImage">
-      </button>
-      <div style="color:#19aab8; margin-top:8px; font-size:0.98rem;">थेट आर्थिक मदतीसाठी क्लिक करा</div>
-      <div style="color:#15626a; margin-top:4px; font-size:0.93rem;">UPI: <b>nandkishorchipade@okicici</b></div>
-    </div>
-    <div class="actions">
-      <button type="submit" id="submitBtn">सबमिट करा</button>
-    </div>
-  </form>
-  <div id="thankyouMessage">
-    फॉर्म सबमिट झाला. धन्यवाद!
-    <div id="thankyouActions">
-      <button type="button" id="thankyouExitBtn">एग्झिट</button>
-    </div>
-  </div>
-  <div id="totalsSection"></div>
-  <footer>
-    © हा जागर संवेदनांचा; हा जागर जाणीवांचा!
-  </footer>
-  <script src="script.js"></script>
-</body>
-</html>
+function populateReference() {
+  const selectedVillage = villageSelect.value;
+  let refs = [];
+  if (selectedVillage && villageMap[selectedVillage]) {
+    refs = villageMap[selectedVillage];
+  } else {
+    refs = convenerData;
+  }
+  referenceSelect.innerHTML = '<option value="">संयोजक निवडा</option>';
+  refs.forEach(r => {
+    const opt = document.createElement('option');
+    opt.value = r.name;
+    opt.textContent = r.name + (r.mobile ? ' (' + r.mobile + ')' : '');
+    referenceSelect.appendChild(opt);
+  });
+}
+
+// --- 4. तारीख लॉजिक ---
+function setupDateLogic() {
+  // 15 Sept 2025 ते 15 Oct 2025
+  const minDate = new Date('2025-09-15');
+  const maxDate = new Date('2025-10-15');
+  let now = new Date();
+
+  let min, max;
+  if (now < minDate) {
+    min = minDate;
+  } else if (now > maxDate) {
+    min = maxDate;
+  } else {
+    min = now;
+    min.setHours(0,0,0,0);
+  }
+  max = maxDate;
+
+  function fmt(d) {
+    return d.toISOString().split('T')[0];
+  }
+
+  if (now > maxDate) {
+    dateInput.disabled = true;
+    submitBtn.disabled = true;
+    isDateInputEnabled = false;
+    dateInput.value = '';
+    errorDiv.style.display = 'block';
+    errorDiv.textContent = 'ही मोहीम संपली आहे.';
+    return;
+  } else {
+    isDateInputEnabled = true;
+    dateInput.disabled = false;
+    submitBtn.disabled = false;
+    errorDiv.style.display = 'none';
+  }
+
+  dateInput.setAttribute('min', fmt(min));
+  dateInput.setAttribute('max', fmt(max));
+}
+
+// --- 5. वेळेचा स्लॉट ---
+function populateTimeSlots() {
+  const slots = [
+    'सकाळी 8 ते 10',
+    'सकाळी 10 ते 12',
+    'दुपारी 12 ते 2',
+    'दुपारी 2 ते 4',
+    'संध्याकाळी 4 ते 6',
+    'रात्री 6 नंतर'
+  ];
+  timeslotSelect.innerHTML = '';
+  slots.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s;
+    opt.textContent = s;
+    timeslotSelect.appendChild(opt);
+  });
+}
+
+// --- 3. लोकेशन बटन ---
+locBtn.addEventListener('click', function(e) {
+  e.preventDefault();
+  locationInput.value = 'मिळवत आहे...';
+  if (!navigator.geolocation) {
+    locationInput.value = 'लोकेशन मिळाले नाही';
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      const { latitude, longitude } = pos.coords;
+      locationInput.value = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
+    },
+    err => {
+      locationInput.value = 'लोकेशन मिळाले नाही';
+    }
+  );
+});
+
+// --- 6. रद्दी फक्त आकडे ---
+wasteInput.addEventListener('input', function() {
+  this.value = this.value.replace(/[^\d]/g, '');
+});
+
+// --- 7. फॉर्म सबमिट ---
+mainForm.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  errorDiv.style.display = 'none';
+  if (!isDateInputEnabled) {
+    errorDiv.style.display = 'block';
+    errorDiv.textContent = 'ही मोहीम संपली आहे.';
+    return;
+  }
+  let name = mainForm.name.value.trim();
+  let village = mainForm.village.value.trim();
+  let address = mainForm.address.value.trim();
+  let location = mainForm.location.value.trim();
+  let mobile = mainForm.mobile.value.trim();
+  let waste = mainForm.waste.value.trim();
+  let date = mainForm.date.value.trim();
+  let timeslot = mainForm.timeslot.value.trim();
+  let reference = mainForm.reference.value.trim();
+
+  if (!name || !village || !address || !mobile || !waste || !date || !timeslot || !reference) {
+    errorDiv.style.display = 'block';
+    errorDiv.textContent = 'सर्व आवश्यक माहिती भरा.';
+    return;
+  }
+  if (!/^[0-9]{10}$/.test(mobile)) {
+    errorDiv.style.display = 'block';
+    errorDiv.textContent = 'वैध मोबाईल नंबर लिहा.';
+    return;
+  }
+  if (!/^\d+$/.test(waste) || waste === '0') {
+    errorDiv.style.display = 'block';
+    errorDiv.textContent = 'रद्दी (किलो) फक्त आकड्यात द्या.';
+    return;
+  }
+
+  let timestamp = new Date().toLocaleString('sv-SE', { timeZone: 'Asia/Kolkata' }).replace('T', ' ');
+
+  // Email field काढली आहे (Point 7)
+  const row = [
+    timestamp, name, address, location, mobile, reference, waste, date, timeslot, ""
+  ];
+  // "Timestamp", "Name", "Address", "Location", "Mobile", "Reference", "Waste", "Date", "Time Slot", "funds"
+
+  try {
+    // आपल्या Apps Script Web App endpoint वापरा
+    const WEBAPP_URL = 'YOUR_WEBAPP_URL_HERE'; // <-- Apps Script URL
+    const response = await fetch(WEBAPP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ row })
+    });
+    const result = await response.json();
+    if (result.success) {
+      mainForm.reset();
+      successDiv.style.display = 'block';
+      setTimeout(() => { successDiv.style.display = 'none'; }, 2000);
+      showThankYou();
+      fetchTotals();
+    } else {
+      throw new Error(result.message || 'error');
+    }
+  } catch (err) {
+    errorDiv.style.display = 'block';
+    errorDiv.textContent = 'सबमिट अयशस्वी. कृपया पुन्हा प्रयत्न करा.';
+    return;
+  }
+});
+
+// --- 8. Thank you logic & totals ---
+function showThankYou() {
+  mainForm.style.display = 'none';
+  thankyouMsg.style.display = 'block';
+  totalsSection.style.display = 'block';
+}
+thankyouExitBtn.addEventListener('click', () => {
+  thankyouMsg.style.display = 'none';
+  mainForm.style.display = '';
+  totalsSection.style.display = 'none';
+});
+
+// --- 9. Fetch totals ---
+async function fetchTotals() {
+  try {
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RESPONSES_TAB}?key=${API_KEY}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    let rows = data.values || [];
+    rows.shift();
+    let totalWaste = 0, totalFunds = 0;
+    rows.forEach(r => {
+      let w = parseInt(r[6] || '0', 10);
+      if (!isNaN(w)) totalWaste += w;
+      let f = parseFloat(r[9] || '0');
+      if (!isNaN(f)) totalFunds += f;
+    });
+    totalsSection.innerHTML =
+      `<div>एकूण रद्दी संकलन: <b>${totalWaste} किलो</b></div>
+       <div>एकूण निधी: <b>${totalFunds} ₹</b></div>`;
+  } catch (err) {
+    totalsSection.innerHTML = 'एकूण माहिती मिळवता आली नाही.';
+  }
+}
+
+// --- 10. QR Pay button ---
+qrPayBtn.addEventListener('click', function() {
+  // युपीआय कोड लपवलेला आहे. क्लिक केल्यावर UPI intent उघडा
+  window.open('upi://pay?pa=nandkishorchipade@okicici&pn=SamajikDiwali&am=&cu=INR', '_blank');
+});
+
+// --- On page load setup ---
+window.addEventListener('DOMContentLoaded', function() {
+  fetchConveners();
+  setupDateLogic();
+  populateTimeSlots();
+});
+
+// --- तारीख लॉजिक अपडेट होत राहावे ---
+setInterval(setupDateLogic, 60*1000);
