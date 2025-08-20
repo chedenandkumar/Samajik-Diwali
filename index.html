@@ -1,144 +1,292 @@
 <!DOCTYPE html>
 <html lang="mr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>सामाजिक दिवाळी</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f5f5f5;
-            color: #000000; /* आवश्यकता 1: काळा रंग */
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .headline1, .headline2 {
-            font-size: 24px; /* आवश्यकता 10: एकसारखा फॉन्ट साइज */
-            font-weight: bold; /* आवश्यकता 10: बोल्ड वजन */
-            text-align: center;
-            margin: 10px 0;
-        }
-        .header {
-            padding: 20px;
-            width: 100%;
-            text-align: center;
-            background-color: #ffffff; /* आवश्यकता 6 काढली: SVG पॅटर्नऐवजी साधा रंग */
-        }
-        form, .thankyou-message {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 500px;
-            margin-bottom: 20px;
-        }
-        input, select, button {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-            box-sizing: border-box; /* आवश्यकता 9: मोबाइल ऑप्टिमायझेशन */
-        }
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s; /* आवश्यकता 9: टच-फ्रेंडली */
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        #locBtn {
-            display: inline-block;
-            width: auto;
-            padding: 5px 10px;
-        }
-        #qrPayBtn {
-            background: none;
-            border: none;
-            padding: 0;
-        }
-        #qrPayBtn img {
-            width: 50px;
-            height: 50px;
-            border: none; /* आवश्यकता 3: बॉर्डर काढले */
-            background: none; /* आवश्यकता 3: बॅकग्राऊंड काढले */
-        }
-        #success, #error {
-            display: none;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 4px;
-            text-align: center;
-        }
-        #success {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        #error {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-        .thankyou-message {
-            display: none;
-            text-align: center;
-        }
-        @media (max-width: 600px) {
-            form, .thankyou-message {
-                padding: 15px;
-            }
-            .headline1, .headline2 {
-                font-size: 20px; /* आवश्यकता 9: मोबाइलवर रिस्पॉन्सिव्ह */
-            }
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>रद्दी संकलनातून सामाजिक दिवाळी 2025</title>
+  <style>
+    body {
+      font-family: 'Noto Sans Devanagari', 'Arial', sans-serif;
+      background: #fff;
+      margin: 0;
+      padding: 0;
+      color: #000; /* By default text color - black */
+    }
+    header {
+      margin: 0;
+      padding: 32px 0 12px 0;
+      text-align: center;
+      background: #19aab8;
+      border-bottom: 1.5px solid #19aab8;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.1rem;
+      font-weight: bold;
+      color: #fff;
+      letter-spacing: 1px;
+    }
+    .headline1, .headline2 {
+      font-size: 2.1rem;
+      font-weight: bold;
+      color: #fff;
+      letter-spacing: 1px;
+      display: block;
+    }
+    .subtitle {
+      margin-top: 8px;
+      margin-bottom: 8px;
+      font-size: 1rem;
+      text-align: center;
+      color: #19aab8;
+      font-weight: 500;
+    }
+    form {
+      max-width: 410px;
+      margin: 24px auto 0 auto;
+      padding: 28px 24px 20px 24px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 3px 16px rgba(0,0,60,0.10);
+      position: relative;
+    }
+    label {
+      display: block;
+      margin-bottom: 2px;
+      margin-top: 14px;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+      color: #19aab8;
+    }
+    input[type="text"], input[type="tel"], textarea, select, input[type="date"] {
+      width: 100%;
+      font-size: 1rem;
+      padding: 7px 8px;
+      border-radius: 7px;
+      border: 1.2px solid #19aab8;
+      margin-bottom: 7px;
+      background: #f7fbff;
+      transition: border 0.2s;
+      box-sizing: border-box;
+      color: #15626a;
+    }
+    input:focus, textarea:focus, select:focus {
+      border-color: #19aab8;
+      outline: none;
+      background: #e3fafc;
+    }
+    textarea {
+      min-height: 56px;
+      resize: vertical;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+      justify-content: center;
+    }
+    .error {
+      color: #b40000;
+      background: #fff0f0;
+      border-radius: 5px;
+      padding: 6px 10px;
+      margin: 0 0 4px 0;
+      text-align: center;
+      display: none;
+    }
+    .success {
+      color: #097c00;
+      background: #e6ffe6;
+      border-radius: 6px;
+      padding: 12px;
+      margin: 12px auto 0 auto;
+      max-width: 400px;
+      text-align: center;
+      font-size: 1.13rem;
+      font-weight: 500;
+      display: none;
+    }
+    #thankyouMessage {
+      display: none;
+      border-radius: 6px;
+      padding: 20px 16px 14px 16px;
+      margin: 12px auto 0 auto;
+      max-width: 400px;
+      text-align: center;
+      font-size: 1.14rem;
+      font-weight: 500;
+      color: #087c00;
+      border: none;
+      box-shadow: none;
+      background: none;
+    }
+    #thankyouActions {
+      margin-top: 14px;
+      text-align: center;
+    }
+    .qr-section {
+      text-align: center;
+      margin-top: 12px;
+      margin-bottom: 12px;
+    }
+    .qr-section button {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+    }
+    .qr-section img {
+      max-width: 120px;
+      width: 100%;
+      border-radius: 50%;
+      box-shadow: none; /* Remove shadow */
+      background: #fff;
+      display: inline-block;
+      border: none; /* Remove border */
+      transition: box-shadow 0.2s;
+    }
+    .qr-section img:hover {
+      box-shadow: none;
+      border-color: none;
+    }
+    button {
+      background: #19aab8;
+      color: #fff;
+      font-weight: 500;
+      border: none;
+      border-radius: 6px;
+      padding: 7px 19px;
+      font-size: 1.04rem;
+      cursor: pointer;
+      box-shadow: 0 1px 4px rgba(100,100,180,0.07);
+      transition: background 0.18s;
+    }
+    button:hover, button:focus {
+      background: #15626a;
+    }
+    #locBtn {
+      padding: 7px 14px;
+      font-size: 0.99rem;
+      margin-right: 7px;
+      margin-left: 0;
+      background: #19aab8;
+      color: #fff;
+      border: 1px solid #19aab8;
+      font-weight: 500;
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgba(100,100,180,0.06);
+      transition: background 0.18s;
+      order: 0;
+    }
+    #locBtn:hover {
+      background: #15626a;
+      color: #fff;
+    }
+    footer {
+      background: #19aab8;
+      color: #fff;
+      text-align: center;
+      padding: 16px 0 12px 0;
+      margin-top: 36px;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+      border-top: 1.5px solid #19aab8;
+    }
+    #totalsSection {
+      display: none;
+      margin: 18px auto 0 auto;
+      max-width: 400px;
+      text-align: center;
+      font-size: 1.09rem;
+      color: #15626a;
+      background: #e3fafc;
+      border-radius: 8px;
+      padding: 12px;
+    }
+    @media (max-width:500px) {
+      header h1 { font-size:1.2rem; }
+      .headline1, .headline2 { font-size:1.2rem; }
+      form { padding:14px 4vw 14px 4vw; }
+      #thankyouMessage { padding:12px 4vw 12px 4vw; }
+      .qr-section img { max-width: 70vw; }
+      #totalsSection { font-size:1rem; }
+    }
+  </style>
+  <!-- Google Fonts for Devanagari -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="header">
-        <h1 class="headline1">सामाजिक दिवाळी</h1>
-        <h2 class="headline2">रद्दी संकलन फॉर्म</h2>
+  <header>
+    <img src="logo.png" alt="Logo" style="max-width:80px;">
+    <h1>
+      <span class="headline1">रद्दी संकलनातून</span>
+      <span class="headline2">सामाजिक दिवाळी 2025</span>
+    </h1>
+  </header>
+  <div class="subtitle">
+    उपक्रमाकरीता आपल्याकडील वर्तमान पत्राची रद्दी दान करावयाची असल्यास खालील माहिती भरा.
+  </div>
+  <div class="success" id="success">फॉर्म सबमिट झाला. धन्यवाद!</div>
+  <form id="main-form" autocomplete="off">
+    <div class="error" id="error">सर्व फिल्ड्स तपासा</div>
+    <label for="name">नाव:</label>
+    <input type="text" id="name" name="name" required autocomplete="off">
+
+    <label for="village">गांव:</label>
+    <select id="village" name="village" required>
+      <option value="">गांव निवडा</option>
+      <!-- गाव populate होईल -->
+    </select>
+
+    <label for="address">पत्ता:</label>
+    <textarea id="address" name="address" rows="2" placeholder="(गांव/रोड/बिल्डिंग)" required></textarea>
+
+    <label for="location">माहिती घरून भरत असाल तर तुमचे लोकेशन शेअर करा:</label>
+    <div style="display: flex; gap: 6px;">
+      <button type="button" id="locBtn" style="white-space:nowrap;">लोकेशन मिळवा</button>
+      <input type="text" id="location" name="location" autocomplete="off" readonly style="flex:1;" placeholder="← चिन्हावर टच करा">
     </div>
 
-    <form id="main-form">
-        <input type="text" id="name" name="name" placeholder="तुमचे नाव" required>
-        <input type="text" id="address" name="address" placeholder="पत्ता" required>
-        <input type="text" id="location" name="location" placeholder="← चिन्हावर टच करा" readonly> <!-- आवश्यकता 4: प्लेसहोल्डर -->
-        <button type="button" id="locBtn">लोकेशन मिळवा</button>
-        <input type="tel" id="mobile" name="mobile" placeholder="मोबाईल नंबर" pattern="[0-9]{10}" required>
-        <input type="email" id="email" name="email" placeholder="ईमेल (पर्यायी)"> <!-- आवश्यकता 5: ईमेल पर्यायी -->
-        <select id="village" name="village" required>
-            <option value="">-- गांव निवडा --</option>
-        </select>
-        <select id="reference" name="reference" required>
-            <option value="">-- संयोजक निवडा --</option>
-        </select>
-        <input type="number" id="waste" name="waste" placeholder="रद्दीचे वजन (किलोमध्ये)" step="0.1" required> <!-- आवश्यकता 7: न्यूमेरिक -->
-        <input type="date" id="date" name="date" required>
-        <select id="timeslot" name="timeslot" disabled required>
-            <option value="">-- वेळ निवडा --</option>
-        </select>
-        <button type="submit" id="submitBtn">सबमिट</button>
-    </form>
+    <label for="mobile">संपर्कासाठी मोबाईल नंबर:</label>
+    <input type="tel" id="mobile" name="mobile" required pattern="^[0-9]{10}$" maxlength="10" autocomplete="off">
 
-    <div id="success">फॉर्म यशस्वीरित्या सबमिट झाला!</div>
-    <div id="error">कृपया सर्व आवश्यक फिल्ड्स भरा.</div>
+    <label for="waste">उपक्रमासाठी उपलब्ध अंदाजे रद्दी किती (किलो):</label>
+    <input type="number" id="waste" name="waste" required min="1" autocomplete="off" inputmode="numeric" pattern="[0-9]*">
 
-    <div class="thankyou-message" id="thankyouMessage">
-        <h3>धन्यवाद!</h3>
-        <p>तुमचा फॉर्म यशस्वीरित्या सबमिट झाला आहे.</p>
-        <p>एकूण रद्दी: <span id="totalWaste">0</span> किलो</p>
-        <p>एकूण निधी: ₹<span id="totalFunds">0</span></p>
-        <button type="button" id="thankyouExitBtn">बंद करा</button>
-        <button id="qrPayBtn"><img src="https://github.com/chedenandkumar/Samajik-Diwali/raw/main/R-logo.png" alt="QR Pay"></button> <!-- आवश्यकता 3: QR लोगो -->
+    <label for="date">रद्दी संकलित करण्यासाठी तारीख व वेळ सुचवा:</label>
+    <input type="date" id="date" name="date" required>
+    <select id="timeslot" name="timeslot"></select>
+
+    <label for="reference">उपक्रमाची माहिती आपल्यापर्यंत पोहोचवणाऱ्या संयोजकाचे नाव निवडा:</label>
+    <select id="reference" name="reference" required>
+      <option value="">संयोजक निवडा</option>
+      <!-- संयोजक populate होईल -->
+    </select>
+
+    <label for="email">ईमेल (ऑटो):</label>
+    <input type="email" id="email" name="email" autocomplete="email" readonly style="background:#e9ecef;">
+
+    <div class="qr-section">
+      <button type="button" id="qrPayBtn">
+        <img src="https://github.com/chedenandkumar/Samajik-Diwali/raw/main/R-logo.png" alt="R Logo" id="qrImage">
+      </button>
+      <div style="color:#19aab8; margin-top:8px; font-size:0.98rem;">थेट आर्थिक मदतीसाठी क्लिक करा</div>
+      <div style="color:#15626a; margin-top:4px; font-size:0.93rem;">UPI: <b>nandkishorchipade@okicici</b></div>
     </div>
-
-    <script src="script.js"></script>
+    <div class="actions">
+      <button type="submit" id="submitBtn">सबमिट करा</button>
+    </div>
+  </form>
+  <div id="thankyouMessage">
+    फॉर्म सबमिट झाला. धन्यवाद!
+    <div id="thankyouActions">
+      <button type="button" id="thankyouExitBtn">एग्झिट</button>
+    </div>
+  </div>
+  <div id="totalsSection"></div>
+  <footer>
+    © हा जागर संवेदनांचा; हा जागर जाणीवांचा!
+  </footer>
+  <script src="script.js"></script>
 </body>
 </html>
