@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
     .then(res => res.json())
     .then(data => {
       organizersData = data.map(row => ({
-        village: (row.village || '').toString().trim(), // Assuming 'village' column in sheet
+        village: (row.village || '').toString().trim(),
         name: (row.name || row[0] || '').toString().trim(),
         mobile: (row.mobile || row[1] || '').toString().trim(),
       })).filter(it => it.name && it.village);
@@ -186,14 +186,14 @@ document.addEventListener('DOMContentLoaded', function () {
         thankyouMessage.style.display = 'block';
         successMsg.style.display = 'block';
 
-        // आवश्यकता 8: स्टॅट्स मिळवा आणि दाखवा
-        const statsResponse = await fetch('https://opensheet.elk.sh/1W059r6QUWecU8WY5OdLLybCMkPOPr_K5IXXEETUbrn4/Stats'); // Assuming 'Stats' sheet for waste and funds
+        // आवश्यकता 8: स्टॅट्स मिळवा आणि दाखवा ("Responses" टॅबमधून)
+        const statsResponse = await fetch('https://opensheet.elk.sh/1W059r6QUWecU8WY5OdLLybCMkPOPr_K5IXXEETUbrn4/Responses');
         const statsData = await statsResponse.json();
         let totalWaste = 0;
         let totalFunds = 0;
 
         if (statsData && statsData.length) {
-          totalWaste = statsData.reduce((sum, row) => sum + parseFloat(row.waste || 0), 0);
+          totalWaste = statsData.reduce((sum, row) => sum + parseFloat(row.Waste || 0), 0);
           totalFunds = statsData.reduce((sum, row) => sum + parseFloat(row.funds || 0), 0);
         }
 
@@ -225,6 +225,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // QR/R-logo बटणवर क्लिक केल्यावर पेमेंट ॲप उघडा
   qrPayBtn && qrPayBtn.addEventListener('click', function () {
-    window.location.href = 'upi://pay?pa=nandkishorchipade@okicici&pn=SamajikDiwali&cu=INR'; // तुमचा UPI ID जोडला
+    const upiLink = 'upi://pay?pa=nandkishorchipade@okicici&pn=SamajikDiwali&cu=INR&am=0';
+    try {
+      window.location.href = upiLink;
+      // फॉल बॅक: जर UPI लिंक 2 सेकंदात काम करत नसेल, तर अलर्ट दाखवा
+      setTimeout(() => {
+        alert('UPI ॲप उघडत नसेल, तर कृपया QR कोड स्कॅन करा किंवा Google Pay/PhonePe सारखे ॲप इन्स्टॉल करा.');
+      }, 2000);
+    } catch (err) {
+      console.error('UPI लिंक त्रुटी:', err);
+      alert('UPI पेमेंट ॲप उघडण्यात त्रुटी. कृपया QR कोड स्कॅन करा किंवा दुसरे डिव्हाइस वापरा.');
+    }
   });
 });
