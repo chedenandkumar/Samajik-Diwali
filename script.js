@@ -1,158 +1,240 @@
-document.addEventListener('DOMContentLoaded', function () {
-  const form = document.getElementById('main-form');
-  const successMsg = document.getElementById('success');
-  const errorMsg = document.getElementById('error');
-  const thankyouMessage = document.getElementById('thankyouMessage');
-  const locBtn = document.getElementById('locBtn');
-  const locationField = document.getElementById('location');
-  const referenceSelect = document.getElementById('reference');
-  const timeslotSelect = document.getElementById('timeslot');
-  const dateInput = document.getElementById('date');
-  const thankyouExitBtn = document.getElementById('thankyouExitBtn');
-  const qrPayBtn = document.getElementById('qrPayBtn');
+// CONFIG -- या भागातील कोणतीही ओळ आता गरजेची नाही, काढून टाकली आहे
 
-  // संयोजकांची यादी लोड करणे
-  const SHEET_URL = 'https://opensheet.elk.sh/1W059r6QUWecU8WY5OdLLybCMkPOPr_K5IXXEETUbrn4/Conveners';
-  fetch(SHEET_URL)
-    .then(res => res.json())
-    .then(data => {
-      const HONORIFICS_REGEX = /^(श्री\.?\s*|श्रीमती\.?\s*|डॉ\.?\s*|डॉ\s*|Dr\.?\s*|Dr\s*|Mr\.?\s*|Mrs\.?\s*)/i;
-      const items = data.map(row => {
-        const rawName = (row.name || row[0] || '').toString().trim();
-        const mobile = (row.mobile || row[1] || '').toString().trim();
-        const sortKey = rawName.replace(HONORIFICS_REGEX, '').trim();
-        return { displayName: rawName, sortKey, mobile };
-      }).filter(it => it.displayName);
-      const collator = new Intl.Collator('mr', { sensitivity: 'base', numeric: true });
-      items.sort((a, b) => collator.compare(a.sortKey, b.sortKey));
-      referenceSelect.innerHTML = '<option value="">-- संयोजक निवडा --</option>';
-      items.forEach(item => {
-        const opt = document.createElement('option');
-        opt.value = item.displayName;
-        opt.textContent = item.displayName;
-        opt.setAttribute('data-mobile', item.mobile);
-        referenceSelect.appendChild(opt);
-      });
-      // शेवटी 'यापैकी कोणीही नाही अन्य मार्ग'
-      const otherOpt = document.createElement('option');
-      otherOpt.value = 'यापैकी कोणीही नाही अन्य मार्ग';
-      otherOpt.textContent = 'यापैकी कोणीही नाही अन्य मार्ग';
-      referenceSelect.appendChild(otherOpt);
-    })
-    .catch(err => console.error('संयोजक लोड करताना त्रुटी:', err));
+const villageSelect = document.getElementById('village');
+const referenceSelect = document.getElementById('reference');
+const mainForm = document.getElementById('main-form');
+const errorDiv = document.getElementById('error');
+const successDiv = document.getElementById('success');
+const thankyouMsg = document.getElementById('thankyouMessage');
+const thankyouExitBtn = document.getElementById('thankyouExitBtn');
+const totalsSection = document.getElementById('totalsSection');
+const submitBtn = document.getElementById('submitBtn');
+const wasteInput = document.getElementById('waste');
+const dateInput = document.getElementById('date');
+const timeslotSelect = document.getElementById('timeslot');
+const locBtn = document.getElementById('locBtn');
+const locationInput = document.getElementById('location');
+const qrPayBtn = document.getElementById('qrPayBtn');
 
-  // तारीख व वेळेचा स्लॉट निवडणे (15 सप्टेंबर ते 15 ऑक्टोबर 2025 लॉजिक)
-  const SLOTS = [
-    { label: "08:00 AM - 10:00 AM", start: "08:00" },
-    { label: "10:00 AM - 12:00 PM", start: "10:00" },
-    { label: "12:00 PM - 02:00 PM", start: "12:00" },
-    { label: "02:00 PM - 04:00 PM", start: "14:00" },
-    { label: "04:00 PM - 06:00 PM", start: "16:00" },
-    { label: "05:00 PM - 07:00 PM", start: "17:00" }
+let convenerData = [];
+let villageMap = {};
+let isDateInputEnabled = true;
+
+// --- गाव/संयोजक populate ---
+// Dummy data: इथेच तुमचे संयोजक, गाव hardcode करा किंवा Apps Script/Web App वापरून आणा.
+const DUMMY_CONVENERS = [
+  { village: 'सावरगांव', name: 'रामदास पवार', mobile: '9123456789', info: '' },
+  { village: 'पिंपळगांव', name: 'शिवाजी शिंदे', mobile: '9876543210', info: '' },
+  // आणखी संयोजक इथे टाका...
+];
+
+function loadConveners() {
+  convenerData = DUMMY_CONVENERS;
+  villageMap = {};
+  convenerData.forEach(row => {
+    if (!villageMap[row.village]) villageMap[row.village] = [];
+    villageMap[row.village].push(row);
+  });
+
+  villageSelect.innerHTML = '<option value="">गांव निवडा</option>';
+  Object.keys(villageMap).sort().forEach(v => {
+    const opt = document.createElement('option');
+    opt.value = v;
+    opt.textContent = v;
+    villageSelect.appendChild(opt);
+  });
+
+  villageSelect.addEventListener('change', populateReference);
+  populateReference();
+}
+
+function populateReference() {
+  const selectedVillage = villageSelect.value;
+  let refs = [];
+  if (selectedVillage && villageMap[selectedVillage]) {
+    refs = villageMap[selectedVillage];
+  } else {
+    refs = convenerData;
+  }
+  referenceSelect.innerHTML = '<option value="">संयोजक निवडा</option>';
+  refs.forEach(r => {
+    const opt = document.createElement('option');
+    opt.value = r.name;
+    opt.textContent = r.name + (r.mobile ? ' (' + r.mobile + ')' : '');
+    referenceSelect.appendChild(opt);
+  });
+}
+
+// --- तारीख लॉजिक ---
+function setupDateLogic() {
+  // 15 Sept 2025 ते 15 Oct 2025
+  const minDate = new Date('2025-09-15');
+  const maxDate = new Date('2025-10-15');
+  let now = new Date();
+
+  let min, max;
+  if (now < minDate) {
+    min = minDate;
+  } else if (now > maxDate) {
+    min = maxDate;
+  } else {
+    min = now;
+    min.setHours(0,0,0,0);
+  }
+  max = maxDate;
+
+  function fmt(d) {
+    return d.toISOString().split('T')[0];
+  }
+
+  if (now > maxDate) {
+    dateInput.disabled = true;
+    submitBtn.disabled = true;
+    isDateInputEnabled = false;
+    dateInput.value = '';
+    errorDiv.style.display = 'block';
+    errorDiv.textContent = 'ही मोहीम संपली आहे.';
+    return;
+  } else {
+    isDateInputEnabled = true;
+    dateInput.disabled = false;
+    submitBtn.disabled = false;
+    errorDiv.style.display = 'none';
+  }
+
+  dateInput.setAttribute('min', fmt(min));
+  dateInput.setAttribute('max', fmt(max));
+}
+
+// --- वेळेचा स्लॉट ---
+function populateTimeSlots() {
+  const slots = [
+    'सकाळी 8 ते 10',
+    'सकाळी 10 ते 12',
+    'दुपारी 12 ते 2',
+    'दुपारी 2 ते 4',
+    'संध्याकाळी 4 ते 6',
+    'रात्री 6 नंतर'
   ];
-  const minDate = '2025-09-15';
-  const maxDate = '2025-10-15';
-  dateInput.setAttribute('min', minDate);
-  dateInput.setAttribute('max', maxDate);
+  timeslotSelect.innerHTML = '';
+  slots.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s;
+    opt.textContent = s;
+    timeslotSelect.appendChild(opt);
+  });
+}
 
-  dateInput.addEventListener('change', function () {
-    timeslotSelect.innerHTML = '<option value="">-- वेळ निवडा --</option>';
-    if (!this.value) {
-      timeslotSelect.disabled = true;
-      return;
+// --- लोकेशन बटन ---
+locBtn.addEventListener('click', function(e) {
+  e.preventDefault();
+  locationInput.value = 'मिळवत आहे...';
+  if (!navigator.geolocation) {
+    locationInput.value = 'लोकेशन मिळाले नाही';
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      const { latitude, longitude } = pos.coords;
+      locationInput.value = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
+    },
+    err => {
+      locationInput.value = 'लोकेशन मिळाले नाही';
     }
-    if (this.value < minDate || this.value > maxDate) {
-      timeslotSelect.disabled = true;
-      timeslotSelect.innerHTML = '<option value="">तारीख योग्य नाही</option>';
-      return;
-    }
-    timeslotSelect.disabled = false;
-    SLOTS.forEach(slot => {
-      const opt = document.createElement('option');
-      opt.value = slot.start;
-      opt.textContent = slot.label;
-      timeslotSelect.appendChild(opt);
-    });
-  });
-
-  // लोकेशन मिळवणे
-  locBtn.addEventListener('click', () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        pos => {
-          const lat = pos.coords.latitude;
-          const lon = pos.coords.longitude;
-          locationField.value = `https://maps.google.com/?q=${lat},${lon}`;
-        },
-        () => alert('लोकेशन मिळवण्यात अडचण आली. कृपया परवानगी द्या.')
-      );
-    } else {
-      alert('तुमचा ब्राउझर लोकेशन सपोर्ट करत नाही.');
-    }
-  });
-
-  // फॉर्म सबमिट करणे
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    successMsg.style.display = 'none';
-    errorMsg.style.display = 'none';
-    thankyouMessage.style.display = 'none';
-
-    // तारीख योग्य आहे का?
-    const dateVal = dateInput.value;
-    if (!form.checkValidity() || !dateVal || dateVal < minDate || dateVal > maxDate) {
-      errorMsg.style.display = 'block';
-      return;
-    }
-    errorMsg.style.display = 'none';
-
-    const formData = new FormData(form);
-    const data = {};
-    formData.forEach((value, key) => {
-      data[key] = value;
-    });
-
-    // तारीख व वेळेचा स्लॉट पाठवा
-    data.date = dateInput.value || "";
-    data.timeslotLabel = timeslotSelect.options[timeslotSelect.selectedIndex]?.textContent || "";
-
-    // Google Apps Script वेब अ‍ॅप URL
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxC0VqwFA4Bm8dszZytkhTCVSlQwrpZ9lZkKe7CrX10Rid62NqzK2JOeDiXnNTVIa_mSg/exec';
-    const bodyData = new URLSearchParams(data).toString();
-    fetch(SCRIPT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: bodyData
-    })
-      .then(res => res.json().catch(() => ({ success: true })))
-      .then(response => {
-        if (response.success) {
-          form.style.display = 'none';
-          thankyouMessage.style.display = 'block';
-        } else {
-          throw new Error('सबमिशन अयशस्वी');
-        }
-      })
-      .catch(err => {
-        console.error(err);
-        errorMsg.style.display = 'block';
-      });
-  });
-
-  // Thankyou मध्ये Exit बटण
-  thankyouExitBtn && thankyouExitBtn.addEventListener('click', function () {
-    thankyouMessage.style.display = 'none';
-    form.style.display = 'block';
-    form.reset();
-    errorMsg.style.display = 'none';
-    successMsg.style.display = 'none';
-  });
-
-  // QR/R-logo बटणवर क्लिक केल्यावर पेमेंट ॲप उघडा
-  qrPayBtn && qrPayBtn.addEventListener('click', function () {
-    // खाली UPI payment URL टाका, उदा. paytm, phonepe, BHIM, GooglePay
-    // उदाहरण (Google Pay): 'upi://pay?pa=YOURUPIID@okicici&pn=Receiver Name&cu=INR'
-    // कृपया तुमचा तपशील टाका:
-    window.location.href = 'upi://pay?pa=YOURUPIID@okicici&pn=SamajikDiwali&cu=INR';
-  });
+  );
 });
+
+// --- रद्दी फक्त आकडे ---
+wasteInput.addEventListener('input', function() {
+  this.value = this.value.replace(/[^\d]/g, '');
+});
+
+// --- फॉर्म सबमिट ---
+mainForm.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  errorDiv.style.display = 'none';
+  if (!isDateInputEnabled) {
+    errorDiv.style.display = 'block';
+    errorDiv.textContent = 'ही मोहीम संपली आहे.';
+    return;
+  }
+  let name = mainForm.name.value.trim();
+  let village = mainForm.village.value.trim();
+  let address = mainForm.address.value.trim();
+  let location = mainForm.location.value.trim();
+  let mobile = mainForm.mobile.value.trim();
+  let waste = mainForm.waste.value.trim();
+  let date = mainForm.date.value.trim();
+  let timeslot = mainForm.timeslot.value.trim();
+  let reference = mainForm.reference.value.trim();
+
+  if (!name || !village || !address || !mobile || !waste || !date || !timeslot || !reference) {
+    errorDiv.style.display = 'block';
+    errorDiv.textContent = 'सर्व आवश्यक माहिती भरा.';
+    return;
+  }
+  if (!/^[0-9]{10}$/.test(mobile)) {
+    errorDiv.style.display = 'block';
+    errorDiv.textContent = 'वैध मोबाईल नंबर लिहा.';
+    return;
+  }
+  if (!/^\d+$/.test(waste) || waste === '0') {
+    errorDiv.style.display = 'block';
+    errorDiv.textContent = 'रद्दी (किलो) फक्त आकड्यात द्या.';
+    return;
+  }
+
+  let timestamp = new Date().toLocaleString('sv-SE', { timeZone: 'Asia/Kolkata' }).replace('T', ' ');
+
+  const row = [
+    timestamp, name, address, location, mobile, reference, waste, date, timeslot, ""
+  ];
+
+  try {
+    // ---- येथे तुमचा Web App URL वापरा ----
+    const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxC0VqwFA4Bm8dszZytkhTCVSlQwrpZ9lZkKe7CrX10Rid62NqzK2JOeDiXnNTVIa_mSg/exec';
+    const response = await fetch(WEBAPP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ row })
+    });
+    const result = await response.json();
+    if (result.success) {
+      mainForm.reset();
+      successDiv.style.display = 'block';
+      setTimeout(() => { successDiv.style.display = 'none'; }, 2000);
+      showThankYou();
+    } else {
+      throw new Error(result.message || 'error');
+    }
+  } catch (err) {
+    errorDiv.style.display = 'block';
+    errorDiv.textContent = 'सबमिट अयशस्वी. कृपया पुन्हा प्रयत्न करा.';
+    return;
+  }
+});
+
+// --- Thank you logic ---
+function showThankYou() {
+  mainForm.style.display = 'none';
+  thankyouMsg.style.display = 'block';
+}
+thankyouExitBtn.addEventListener('click', () => {
+  thankyouMsg.style.display = 'none';
+  mainForm.style.display = '';
+});
+
+// --- QR Pay button ---
+qrPayBtn.addEventListener('click', function() {
+  window.open('upi://pay?pa=nandkishorchipade@okicici&pn=SamajikDiwali&am=&cu=INR', '_blank');
+});
+
+// --- On page load setup ---
+window.addEventListener('DOMContentLoaded', function() {
+  loadConveners();
+  setupDateLogic();
+  populateTimeSlots();
+});
+
+// --- तारीख लॉजिक अपडेट होत राहावे ---
+setInterval(setupDateLogic, 60*1000);
