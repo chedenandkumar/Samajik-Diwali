@@ -1,6 +1,4 @@
-// CONFIG -- तुमच्या Google Sheet साठी योग्य आयडी/की द्या
-const SHEET_ID = 'YOUR_SHEET_ID_HERE'; // <-- आपला Google Sheet ID
-const API_KEY = 'YOUR_API_KEY_HERE';   // <-- आपला Google Sheets API KEY
+const SHEET_ID = '1W059r6QUWecU8WY5OdLLybCMkPOPr_K5IXXEETUbrn4'; // <-- तुमचा Google Sheet ID
 const CONVENERS_TAB = 'Conveners';
 const RESPONSES_TAB = 'Responses';
 
@@ -14,7 +12,6 @@ const thankyouExitBtn = document.getElementById('thankyouExitBtn');
 const totalsSection = document.getElementById('totalsSection');
 const submitBtn = document.getElementById('submitBtn');
 const wasteInput = document.getElementById('waste');
-const mobileInput = document.getElementById('mobile');
 const dateInput = document.getElementById('date');
 const timeslotSelect = document.getElementById('timeslot');
 const locBtn = document.getElementById('locBtn');
@@ -25,46 +22,32 @@ let convenerData = [];
 let villageMap = {};
 let isDateInputEnabled = true;
 
-// --- 2. गाव/संयोजक populate ---
-async function fetchConveners() {
-  try {
-    // Google Sheets API - Conveners tab fetch
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${CONVENERS_TAB}?key=${API_KEY}`;
-    const res = await fetch(url);
-    const data = await res.json();
+// --- गाव/संयोजक populate ---
+// Dummy data: इथेच तुमचे संयोजक, गाव hardcode करा किंवा Apps Script/Web App वापरून आणा.
+const DUMMY_CONVENERS = [
+  { village: 'सावरगांव', name: 'रामदास पवार', mobile: '9123456789', info: '' },
+  { village: 'पिंपळगांव', name: 'शिवाजी शिंदे', mobile: '9876543210', info: '' },
+  // आणखी संयोजक इथे टाका...
+];
 
-    let rows = data.values || [];
-    rows.shift(); // remove header
-    convenerData = rows.map(r => ({
-      village: r[1],
-      name: r[2],
-      mobile: r[3] || '',
-      info: r[4] || ''
-    }));
+function loadConveners() {
+  convenerData = DUMMY_CONVENERS;
+  villageMap = {};
+  convenerData.forEach(row => {
+    if (!villageMap[row.village]) villageMap[row.village] = [];
+    villageMap[row.village].push(row);
+  });
 
-    // गाव - संयोजक map
-    villageMap = {};
-    convenerData.forEach(row => {
-      if (!villageMap[row.village]) villageMap[row.village] = [];
-      villageMap[row.village].push(row);
-    });
+  villageSelect.innerHTML = '<option value="">गांव निवडा</option>';
+  Object.keys(villageMap).sort().forEach(v => {
+    const opt = document.createElement('option');
+    opt.value = v;
+    opt.textContent = v;
+    villageSelect.appendChild(opt);
+  });
 
-    // गाव populate
-    villageSelect.innerHTML = '<option value="">गांव निवडा</option>';
-    Object.keys(villageMap).sort().forEach(v => {
-      const opt = document.createElement('option');
-      opt.value = v;
-      opt.textContent = v;
-      villageSelect.appendChild(opt);
-    });
-
-    villageSelect.addEventListener('change', populateReference);
-    populateReference();
-
-  } catch (err) {
-    errorDiv.style.display = 'block';
-    errorDiv.textContent = 'गाव/संयोजक माहिती मिळवता आली नाही.';
-  }
+  villageSelect.addEventListener('change', populateReference);
+  populateReference();
 }
 
 function populateReference() {
@@ -84,7 +67,7 @@ function populateReference() {
   });
 }
 
-// --- 4. तारीख लॉजिक ---
+// --- तारीख लॉजिक ---
 function setupDateLogic() {
   // 15 Sept 2025 ते 15 Oct 2025
   const minDate = new Date('2025-09-15');
@@ -125,7 +108,7 @@ function setupDateLogic() {
   dateInput.setAttribute('max', fmt(max));
 }
 
-// --- 5. वेळेचा स्लॉट ---
+// --- वेळेचा स्लॉट ---
 function populateTimeSlots() {
   const slots = [
     'सकाळी 8 ते 10',
@@ -144,7 +127,7 @@ function populateTimeSlots() {
   });
 }
 
-// --- 3. लोकेशन बटन ---
+// --- लोकेशन बटन ---
 locBtn.addEventListener('click', function(e) {
   e.preventDefault();
   locationInput.value = 'मिळवत आहे...';
@@ -163,12 +146,12 @@ locBtn.addEventListener('click', function(e) {
   );
 });
 
-// --- 6. रद्दी फक्त आकडे ---
+// --- रद्दी फक्त आकडे ---
 wasteInput.addEventListener('input', function() {
   this.value = this.value.replace(/[^\d]/g, '');
 });
 
-// --- 7. फॉर्म सबमिट ---
+// --- फॉर्म सबमिट ---
 mainForm.addEventListener('submit', async function(e) {
   e.preventDefault();
   errorDiv.style.display = 'none';
@@ -205,15 +188,13 @@ mainForm.addEventListener('submit', async function(e) {
 
   let timestamp = new Date().toLocaleString('sv-SE', { timeZone: 'Asia/Kolkata' }).replace('T', ' ');
 
-  // Email field काढली आहे (Point 7)
   const row = [
     timestamp, name, address, location, mobile, reference, waste, date, timeslot, ""
   ];
-  // "Timestamp", "Name", "Address", "Location", "Mobile", "Reference", "Waste", "Date", "Time Slot", "funds"
 
   try {
-    // आपल्या Apps Script Web App endpoint वापरा
-    const WEBAPP_URL = 'YOUR_WEBAPP_URL_HERE'; // <-- Apps Script URL
+    // ---- येथे तुमचा Web App URL वापरा ----
+    const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxC0VqwFA4Bm8dszZytkhTCVSlQwrpZ9lZkKe7CrX10Rid62NqzK2JOeDiXnNTVIa_mSg/exec';
     const response = await fetch(WEBAPP_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -225,7 +206,6 @@ mainForm.addEventListener('submit', async function(e) {
       successDiv.style.display = 'block';
       setTimeout(() => { successDiv.style.display = 'none'; }, 2000);
       showThankYou();
-      fetchTotals();
     } else {
       throw new Error(result.message || 'error');
     }
@@ -236,50 +216,24 @@ mainForm.addEventListener('submit', async function(e) {
   }
 });
 
-// --- 8. Thank you logic & totals ---
+// --- Thank you logic ---
 function showThankYou() {
   mainForm.style.display = 'none';
   thankyouMsg.style.display = 'block';
-  totalsSection.style.display = 'block';
 }
 thankyouExitBtn.addEventListener('click', () => {
   thankyouMsg.style.display = 'none';
   mainForm.style.display = '';
-  totalsSection.style.display = 'none';
 });
 
-// --- 9. Fetch totals ---
-async function fetchTotals() {
-  try {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RESPONSES_TAB}?key=${API_KEY}`;
-    const res = await fetch(url);
-    const data = await res.json();
-    let rows = data.values || [];
-    rows.shift();
-    let totalWaste = 0, totalFunds = 0;
-    rows.forEach(r => {
-      let w = parseInt(r[6] || '0', 10);
-      if (!isNaN(w)) totalWaste += w;
-      let f = parseFloat(r[9] || '0');
-      if (!isNaN(f)) totalFunds += f;
-    });
-    totalsSection.innerHTML =
-      `<div>एकूण रद्दी संकलन: <b>${totalWaste} किलो</b></div>
-       <div>एकूण निधी: <b>${totalFunds} ₹</b></div>`;
-  } catch (err) {
-    totalsSection.innerHTML = 'एकूण माहिती मिळवता आली नाही.';
-  }
-}
-
-// --- 10. QR Pay button ---
+// --- QR Pay button ---
 qrPayBtn.addEventListener('click', function() {
-  // युपीआय कोड लपवलेला आहे. क्लिक केल्यावर UPI intent उघडा
   window.open('upi://pay?pa=nandkishorchipade@okicici&pn=SamajikDiwali&am=&cu=INR', '_blank');
 });
 
 // --- On page load setup ---
 window.addEventListener('DOMContentLoaded', function() {
-  fetchConveners();
+  loadConveners();
   setupDateLogic();
   populateTimeSlots();
 });
