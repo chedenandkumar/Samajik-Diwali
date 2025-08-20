@@ -225,6 +225,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // QR/R-logo बटणवर क्लिक केल्यावर पेमेंट ॲप उघडा
   qrPayBtn && qrPayBtn.addEventListener('click', function () {
-    window.location.href = 'upi://pay?pa=YOURUPIID@okicici&pn=SamajikDiwali&cu=INR'; // तुमचा UPI ID टाका
+    window.location.href = 'upi://pay?pa=nandkishorchipade@okicici&pn=SamajikDiwali&cu=INR'; // तुमचा UPI ID जोडला
   });
 });
