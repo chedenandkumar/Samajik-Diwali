@@ -41,13 +41,30 @@ document.addEventListener('DOMContentLoaded', function () {
   let organizersData = [];
 
   fetch(SHEET_URL)
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) throw new Error('Google Sheets डेटा लोड करताना त्रुटी: ' + res.status);
+      return res.json();
+    })
     .then(data => {
+      if (!data || !Array.isArray(data) || data.length === 0) {
+        console.error('Google Sheets मधून डेटा रिक्त आहे');
+        errorMsg.style.display = 'block';
+        errorMsg.textContent = 'गाव आणि संयोजक यादी लोड करताना त्रुटी. कृपया पुन्हा प्रयत्न करा.';
+        return;
+      }
+
       organizersData = data.map(row => ({
-        village: (row.village || '').toString().trim(),
-        name: (row.name || row[0] || '').toString().trim(),
-        mobile: (row.mobile || row[1] || '').toString().trim(),
+        village: (row.village || row.Village || '').toString().trim(), // लवचिक कॉलम नाव
+        name: (row.name || row.Name || row[0] || '').toString().trim(),
+        mobile: (row.mobile || row.Mobile || row[1] || '').toString().trim(),
       })).filter(it => it.name && it.village);
+
+      if (organizersData.length === 0) {
+        console.error('व्हॅलिड डेटा आढळला नाही');
+        errorMsg.style.display = 'block';
+        errorMsg.textContent = 'गाव आणि संयोजक यादी उपलब्ध नाही.';
+        return;
+      }
 
       // गांव ड्रॉपडाऊन भरा
       const villages = [...new Set(organizersData.map(item => item.village))];
@@ -87,7 +104,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       });
     })
-    .catch(err => console.error('संयोजक लोड करताना त्रुटी:', err));
+    .catch(err => {
+      console.error('संयोजक लोड करताना त्रुटी:', err);
+      errorMsg.style.display = 'block';
+      errorMsg.textContent = 'गाव आणि संयोजक यादी लोड करताना त्रुटी. कृपया नेटवर्क तपासा.';
+      setTimeout(() => errorMsg.style.display = 'none', 3000);
+    });
 
   // तारीख आणि वेळ स्लॉट्स
   const SLOTS = [
@@ -133,108 +155,4 @@ document.addEventListener('DOMContentLoaded', function () {
         },
         () => {
           errorMsg.style.display = 'block';
-          errorMsg.textContent = 'लोकेशन मिळवण्यात अडचण आली. कृपया परवानगी द्या.';
-          setTimeout(() => errorMsg.style.display = 'none', 3000);
-        }
-      );
-    } else {
-      errorMsg.style.display = 'block';
-      errorMsg.textContent = 'तुमचा ब्राउझर लोकेशन सपोर्ट करत नाही.';
-      setTimeout(() => errorMsg.style.display = 'none', 3000);
-    }
-  });
-
-  // आवश्यकता 5 आणि 8: Google Sheets मध्ये सबमिशन आणि स्टॅट्स
-  form.addEventListener('submit', async function (e) {
-    e.preventDefault();
-    successMsg.style.display = 'none';
-    errorMsg.style.display = 'none';
-    thankyouMessage.style.display = 'none';
-
-    // तारीख योग्य आहे का?
-    const dateVal = dateInput.value;
-    if (!form.checkValidity() || !dateVal || dateVal < minDate || dateVal > maxDate) {
-      errorMsg.style.display = 'block';
-      errorMsg.textContent = 'सर्व आवश्यक फिल्ड्स भरा किंवा योग्य तारीख निवडा';
-      return;
-    }
-
-    const formData = new FormData(form);
-    const data = {};
-    formData.forEach((value, key) => {
-      data[key] = value;
-    });
-
-    // तारीख आणि वेळ स्लॉट
-    data.date = dateInput.value || "";
-    data.timeslotLabel = timeslotSelect.options[timeslotSelect.selectedIndex]?.textContent || "";
-    data.email = formData.get('email') || 'N/A'; // आवश्यकता 5: ईमेल
-
-    // Google Apps Script वेब अ‍ॅप URL
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxC0VqwFA4Bm8dszZytkhTCVSlQwrpZ9lZkKe7CrX10Rid62NqzK2JOeDiXnNTVIa_mSg/exec';
-    const bodyData = new URLSearchParams(data).toString();
-    try {
-      const response = await fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: bodyData
-      });
-      const result = await response.json().catch(() => ({ success: true }));
-
-      if (result.success) {
-        form.style.display = 'none';
-        thankyouMessage.style.display = 'block';
-        successMsg.style.display = 'block';
-
-        // आवश्यकता 8: स्टॅट्स मिळवा आणि दाखवा ("Responses" टॅबमधून)
-        const statsResponse = await fetch('https://opensheet.elk.sh/1W059r6QUWecU8WY5OdLLybCMkPOPr_K5IXXEETUbrn4/Responses');
-        const statsData = await statsResponse.json();
-        let totalWaste = 0;
-        let totalFunds = 0;
-
-        if (statsData && statsData.length) {
-          totalWaste = statsData.reduce((sum, row) => sum + parseFloat(row.Waste || 0), 0);
-          totalFunds = statsData.reduce((sum, row) => sum + parseFloat(row.funds || 0), 0);
-        }
-
-        document.getElementById('totalWaste').textContent = totalWaste.toFixed(2);
-        document.getElementById('totalFunds').textContent = totalFunds.toFixed(2);
-
-        setTimeout(() => successMsg.style.display = 'none', 3000);
-      } else {
-        throw new Error('सबमिशन अयशस्वी');
-      }
-    } catch (err) {
-      console.error(err);
-      errorMsg.style.display = 'block';
-      errorMsg.textContent = 'सबमिशनमध्ये त्रुटी आली';
-      setTimeout(() => errorMsg.style.display = 'none', 3000);
-    }
-  });
-
-  // Thankyou मध्ये Exit बटण
-  thankyouExitBtn && thankyouExitBtn.addEventListener('click', function () {
-    thankyouMessage.style.display = 'none';
-    form.style.display = 'block';
-    form.reset();
-    errorMsg.style.display = 'none';
-    successMsg.style.display = 'none';
-    timeslotSelect.innerHTML = '<option value="">-- वेळ निवडा --</option>';
-    timeslotSelect.disabled = true;
-  });
-
-  // QR/R-logo बटणवर क्लिक केल्यावर पेमेंट ॲप उघडा
-  qrPayBtn && qrPayBtn.addEventListener('click', function () {
-    const upiLink = 'upi://pay?pa=nandkishorchipade@okicici&pn=SamajikDiwali&cu=INR&am=0';
-    try {
-      window.location.href = upiLink;
-      // फॉल बॅक: जर UPI लिंक 2 सेकंदात काम करत नसेल, तर अलर्ट दाखवा
-      setTimeout(() => {
-        alert('UPI ॲप उघडत नसेल, तर कृपया QR कोड स्कॅन करा किंवा Google Pay/PhonePe सारखे ॲप इन्स्टॉल करा.');
-      }, 2000);
-    } catch (err) {
-      console.error('UPI लिंक त्रुटी:', err);
-      alert('UPI पेमेंट ॲप उघडण्यात त्रुटी. कृपया QR कोड स्कॅन करा किंवा दुसरे डिव्हाइस वापरा.');
-    }
-  });
-});
+          errorMsg.textContent = 'लोकेशन मिळवण्यात अडचण आली. कृपया परवानगी द्या
