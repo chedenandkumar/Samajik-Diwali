@@ -63,7 +63,7 @@
       font-size: 1rem;
       padding: 7px 8px;
       border-radius: 7px;
-      border: 1.2px solid #f0f8ff;
+      border: 1.2px solid #bdbdbd; /* हलकी ग्रे बॉर्डर */
       margin-bottom: 7px;
       background: #f7fbff;
       transition: border 0.2s;
@@ -78,45 +78,6 @@
     textarea {
       min-height: 56px;
       resize: vertical;
-    }
-    .row-flex {
-      display: flex;
-      gap: 8px;
-      align-items: flex-end;
-      margin-bottom: 7px;
-    }
-    .row-flex > * {
-      margin-bottom: 0 !important;
-    }
-    .location-flex {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-      margin-bottom: 7px;
-    }
-    .location-flex input {
-      flex: 1;
-    }
-    .icon-btn {
-      background: none;
-      border: none;
-      padding: 0 6px 0 0;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      height: 32px;
-    }
-    .icon-btn:focus {
-      outline: 2px solid #19aab8;
-    }
-    .icon-btn svg {
-      width: 24px;
-      height: 24px;
-      fill: #15626a;
-      transition: fill 0.18s;
-    }
-    .icon-btn:hover svg {
-      fill: #19aab8;
     }
     .actions {
       display: flex;
@@ -168,6 +129,13 @@
       margin-top: 12px;
       margin-bottom: 12px;
     }
+    .qr-label {
+      color:#19aab8;
+      margin-bottom: 6px;
+      font-size:0.98rem;
+      font-weight: 500;
+      display: block;
+    }
     .qr-section button {
       background: none;
       border: none;
@@ -205,24 +173,65 @@
       color: #fff;
     }
     #locBtn {
-      display: none; /* Hide the old location button */
-    }
-    footer {
+      padding: 7px 14px;
+      font-size: 0.99rem;
+      margin-right: 7px;
+      margin-left: 0;
       background: #19aab8;
       color: #15626a;
-      text-align: center;
-      padding: 16px 0 12px 0;
-      margin-top: 36px;
-      font-size: 1rem;
-      letter-spacing: 0.5px;
-      border-top: 1.5px solid #19aab8;
+      border: 1px solid #19aab8;
+      font-weight: 500;
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgba(100,100,180,0.06);
+      transition: background 0.18s;
+      order: 0;
+    }
+    #locBtn:hover {
+      background: #15626a;
+      color: #15626a;
+    }
+    .row-flex-date {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+      margin-bottom: 7px;
+    }
+    .row-flex-date > div {
+      flex: 1;
+      min-width: 0;
+    }
+    .row-flex-date label {
+      margin-top: 14px;
+      margin-bottom: 2px;
+      display: inline-block;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+    }
+    .row-flex-date label[for="date"] {
+      margin-right: 10px;
+    }
+    .row-flex-date label[for="timeslot"] {
+      visibility: hidden;
+      height: 0;
+      margin: 0;
+      padding: 0;
+    }
+    .location-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 7px;
+    }
+    .location-row input {
+      flex: 1;
     }
     @media (max-width:500px) {
       header h1 .headline1, header h1 .headline2 { font-size:1.1rem; }
       form { padding:14px 4vw 14px 4vw; }
       #thankyouMessage { padding:12px 4vw 12px 4vw; }
       .qr-section img { max-width: 70vw; }
-      .row-flex { flex-direction: column; gap: 0; }
+      .row-flex-date { flex-direction: column; gap: 0; }
+      .row-flex-date label[for="date"] { margin-bottom: 2px; }
     }
   </style>
 </head>
@@ -247,13 +256,9 @@
     <textarea id="address" name="address" rows="2" placeholder="(गांव/रोड/बिल्डिंग)" required></textarea>
 
     <label for="location">शक्य असल्यास लोकेशन शेअर करा:</label>
-    <div class="location-flex">
-      <button type="button" id="locIconBtn" class="icon-btn" title="लोकेशन मिळवा" aria-label="लोकेशन मिळवा">
-        <svg viewBox="0 0 24 24">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v6l5.25 3.15.77-1.28-4.02-2.37z"/>
-        </svg>
-      </button>
-      <input type="text" id="location" name="location" placeholder="← आयकॉनवर टच करा" autocomplete="off" readonly>
+    <div class="location-row">
+      <button type="button" id="locBtn" style="white-space:nowrap;">लोकेशन</button>
+      <input type="text" id="location" name="location" placeholder="← चिन्हावर टच करा" autocomplete="off" readonly>
     </div>
 
     <label for="mobile">संपर्कासाठी मोबाईल नंबर:</label>
@@ -262,13 +267,13 @@
     <label for="waste">उपक्रमासाठी उपलब्ध रद्दी (अंदाज किती किलो):</label>
     <input type="text" id="waste" name="waste" required autocomplete="off">
 
-    <div class="row-flex">
-      <div style="flex:1;">
+    <div class="row-flex-date">
+      <div>
         <label for="date">रद्दी संकलित करण्यासाठी तारीख व वेळ सुचवा:</label>
         <input type="date" id="date" name="date" required>
       </div>
-      <div style="flex:1;">
-        <label for="timeslot" style="visibility:hidden;">वेळ</label>
+      <div>
+        <label for="timeslot">वेळ</label>
         <select id="timeslot" name="timeslot"></select>
       </div>
     </div>
@@ -277,10 +282,10 @@
     <select id="reference" name="reference" required></select>
 
     <div class="qr-section">
+      <span class="qr-label">रूपये लोगोवर क्लिक करा</span>
       <button type="button" id="qrPayBtn">
         <img src="https://github.com/chedenandkumar/Samajik-Diwali/raw/main/R-logo.png" alt="R Logo" id="qrImage">
       </button>
-      <div style="color:#19aab8; margin-top:8px; font-size:0.98rem;">रूपये लोगोवर क्लिक करा</div>
     </div>
     <div class="actions">
       <button type="submit" id="submitBtn">सबमिट करा</button>
@@ -295,27 +300,6 @@
   <footer>
     © जागर फाउंडेशन | सामाजिक दिवाळी 2025
   </footer>
-  <script>
-    // लोकेशन आयकॉनद्वारे लोकेशन मिळवा
-    document.getElementById('locIconBtn').addEventListener('click', function(e) {
-      e.preventDefault();
-      const locationInput = document.getElementById('location');
-      locationInput.value = 'मिळवत आहे...';
-      if (!navigator.geolocation) {
-        locationInput.value = 'लोकेशन मिळाले नाही';
-        return;
-      }
-      navigator.geolocation.getCurrentPosition(
-        pos => {
-          const { latitude, longitude } = pos.coords;
-          locationInput.value = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
-        },
-        err => {
-          locationInput.value = 'लोकेशन मिळाले नाही';
-        }
-      );
-    });
-  </script>
   <script src="script.js"></script>
 </body>
 </html>
