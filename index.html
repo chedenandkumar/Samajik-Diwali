@@ -10,7 +10,7 @@
       background: #fff;
       margin: 0;
       padding: 0;
-      color: #000; /* By default text color - black */
+      color: #000; /* 1. बाय डिफॉल्ट काळा रंग */
     }
     header {
       margin: 0;
@@ -58,7 +58,7 @@
       letter-spacing: 0.2px;
       color: #19aab8;
     }
-    input[type="text"], input[type="tel"], textarea, select, input[type="date"] {
+    input[type="text"], input[type="tel"], textarea, select, input[type="date"], input[type="number"] {
       width: 100%;
       font-size: 1rem;
       padding: 7px 8px;
@@ -139,15 +139,19 @@
       max-width: 120px;
       width: 100%;
       border-radius: 50%;
-      box-shadow: none; /* Remove shadow */
+      box-shadow: none;
       background: #fff;
       display: inline-block;
-      border: none; /* Remove border */
+      border: none;
       transition: box-shadow 0.2s;
     }
     .qr-section img:hover {
       box-shadow: none;
       border-color: none;
+    }
+    .upi-hide {
+      /* 6. युपीआय कोड लपवा */
+      display: none;
     }
     button {
       background: #19aab8;
@@ -212,8 +216,6 @@
       #totalsSection { font-size:1rem; }
     }
   </style>
-  <!-- Google Fonts for Devanagari -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
   <header>
@@ -235,7 +237,6 @@
     <label for="village">गांव:</label>
     <select id="village" name="village" required>
       <option value="">गांव निवडा</option>
-      <!-- गाव populate होईल -->
     </select>
 
     <label for="address">पत्ता:</label>
@@ -260,18 +261,14 @@
     <label for="reference">उपक्रमाची माहिती आपल्यापर्यंत पोहोचवणाऱ्या संयोजकाचे नाव निवडा:</label>
     <select id="reference" name="reference" required>
       <option value="">संयोजक निवडा</option>
-      <!-- संयोजक populate होईल -->
     </select>
 
-    <label for="email">ईमेल (ऑटो):</label>
-    <input type="email" id="email" name="email" autocomplete="email" readonly style="background:#e9ecef;">
-
     <div class="qr-section">
-      <button type="button" id="qrPayBtn">
+      <button type="button" id="qrPayBtn" aria-label="यूपीआयने देणगी द्या">
         <img src="https://github.com/chedenandkumar/Samajik-Diwali/raw/main/R-logo.png" alt="R Logo" id="qrImage">
       </button>
       <div style="color:#19aab8; margin-top:8px; font-size:0.98rem;">थेट आर्थिक मदतीसाठी क्लिक करा</div>
-      <div style="color:#15626a; margin-top:4px; font-size:0.93rem;">UPI: <b>nandkishorchipade@okicici</b></div>
+      <div class="upi-hide" id="upi-id">UPI: <b>nandkishorchipade@okicici</b></div>
     </div>
     <div class="actions">
       <button type="submit" id="submitBtn">सबमिट करा</button>
