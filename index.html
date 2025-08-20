@@ -130,7 +130,7 @@
       margin-bottom: 12px;
     }
     .qr-label {
-      color:#19aab8;
+      color: #000000;
       margin-bottom: 6px;
       font-size:0.98rem;
       font-weight: 500;
@@ -190,31 +190,31 @@
       background: #15626a;
       color: #15626a;
     }
-    .row-flex-date {
+    .row-flex-date-label {
       display: flex;
-      gap: 8px;
       align-items: flex-end;
+      gap: 8px;
       margin-bottom: 7px;
     }
-    .row-flex-date > div {
+    .row-flex-date-label label {
+      margin: 0 10px 0 0;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+      color: #000000;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .row-flex-date-label .date-inputs {
+      display: flex;
+      gap: 8px;
+      flex: 1;
+    }
+    .row-flex-date-label .date-inputs > div {
       flex: 1;
       min-width: 0;
     }
-    .row-flex-date label {
-      margin-top: 14px;
-      margin-bottom: 2px;
-      display: inline-block;
-      font-weight: 500;
-      letter-spacing: 0.2px;
-    }
-    .row-flex-date label[for="date"] {
-      margin-right: 10px;
-    }
-    .row-flex-date label[for="timeslot"] {
-      visibility: hidden;
-      height: 0;
-      margin: 0;
-      padding: 0;
+    .row-flex-date-label label[for="timeslot"] {
+      display: none;
     }
     .location-row {
       display: flex;
@@ -230,8 +230,9 @@
       form { padding:14px 4vw 14px 4vw; }
       #thankyouMessage { padding:12px 4vw 12px 4vw; }
       .qr-section img { max-width: 70vw; }
-      .row-flex-date { flex-direction: column; gap: 0; }
-      .row-flex-date label[for="date"] { margin-bottom: 2px; }
+      .row-flex-date-label { flex-direction: column; align-items: stretch; gap: 0; }
+      .row-flex-date-label .date-inputs { flex-direction: column; gap: 0; }
+      .row-flex-date-label label { margin-bottom: 2px; }
     }
   </style>
 </head>
@@ -267,14 +268,15 @@
     <label for="waste">उपक्रमासाठी उपलब्ध रद्दी (अंदाज किती किलो):</label>
     <input type="text" id="waste" name="waste" required autocomplete="off">
 
-    <div class="row-flex-date">
-      <div>
-        <label for="date">रद्दी संकलित करण्यासाठी तारीख व वेळ सुचवा:</label>
-        <input type="date" id="date" name="date" required>
-      </div>
-      <div>
-        <label for="timeslot">वेळ</label>
-        <select id="timeslot" name="timeslot"></select>
+    <div class="row-flex-date-label">
+      <label for="date">रद्दी संकलित करण्यासाठी तारीख व वेळ सुचवा:</label>
+      <div class="date-inputs">
+        <div>
+          <input type="date" id="date" name="date" required>
+        </div>
+        <div>
+          <select id="timeslot" name="timeslot"></select>
+        </div>
       </div>
     </div>
 
