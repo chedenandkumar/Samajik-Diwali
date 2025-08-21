@@ -14,31 +14,56 @@
     header {
       margin: 0;
       padding: 32px 0 12px 0;
-      text-align: center;
+      text-align: left;
       background: #19aab8;
       border-bottom: 1.5px solid #19aab8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    header h1 {
-      margin: 0;
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 18px;
+      width: 100%;
+      max-width: 620px;
+      margin: 0 auto;
     }
-    .headline1 {
+    .header-logo {
+      max-width: 100px;
+      width: 90px;
+      height: 90px;
+      display: block;
+      margin-right: 10px;
+      object-fit: contain;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,60,0.09);
+    }
+    .headline-row {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 18px;
+    }
+    .headline1, .headline2 {
       font-size: 2.1rem;
       font-weight: bold;
       color: #fff;
       letter-spacing: 1px;
+      margin: 0 6px 0 0;
+      display: inline-block;
     }
     .headline2 {
-      font-size: 2.1rem;
-      font-weight: bold;
-      color: #fff;
-      letter-spacing: 1px;
+      margin: 0;
     }
     .subtitle {
       margin-top: 8px;
       margin-bottom: 8px;
       font-size: 1rem;
       text-align: center;
-      color:  #f0f8ff;
+      color: #000; /* काळा रंग */
       font-weight: 500;
     }
     form {
@@ -149,11 +174,9 @@
       box-shadow: 0 2px 8px rgba(0,0,60,0.11);
       background: #15626a;
       display: inline-block;
-      /* border काढली आहे */
     }
     .qr-section img:hover {
       box-shadow: 0 4px 16px #15626a;
-      /* border-color: #15626a; */
     }
     button {
       background: #19aab8;
@@ -174,12 +197,12 @@
     .location-row {
       display: flex;
       gap: 6px;
-      align-items: stretch; /* Set to stretch for equal height */
+      align-items: stretch;
       margin-bottom: 7px;
     }
     .location-row input {
       flex: 1;
-      height: 38px; /* Match the button height */
+      height: 50px;
       font-size: 1rem;
     }
     .location-icon-btn {
@@ -190,12 +213,12 @@
       cursor: pointer;
       display: flex;
       align-items: center;
-      height: 38px; /* Set same as input for alignment */
-      width: 38px;
+      height: 50px;
+      width: 50px;
     }
     .location-icon-btn img {
-      width: 26px;
-      height: 26px;
+      width: 40px;
+      height: 40px;
       display: block;
       padding: 0;
       margin: 0 auto;
@@ -203,7 +226,6 @@
       border: none;
       box-shadow: none;
     }
-    /* तारीख व वेळ - लेबल एका ओळीत, दोन्ही फिल्ड्स पुढच्या ओळीत एका ओळीत */
     .date-row-group {
       margin-bottom: 7px;
     }
@@ -216,7 +238,7 @@
       letter-spacing: 0.2px;
       color: #000000;
       margin-bottom: 2px;
-      justify-content: flex-start; /* Left align label */
+      justify-content: flex-start;
       text-align: left;
     }
     .date-row-fields {
@@ -224,20 +246,35 @@
       gap: 8px;
       align-items: flex-end;
       margin-bottom: 0;
-      justify-content: flex-start; /* Left align fields */
+      justify-content: flex-start;
       text-align: left;
     }
     .date-row-fields > div {
       flex: 1;
       min-width: 0;
     }
+    @media (max-width:600px) {
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .headline-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+      }
+    }
     @media (max-width:500px) {
-      header h1 .headline1, header h1 .headline2 { font-size:1.1rem; }
+      .headline1, .headline2 { font-size:1.1rem; }
       form { padding:14px 4vw 14px 4vw; }
       #thankyouMessage { padding:12px 4vw 12px 4vw; }
       .qr-section img { max-width: 70vw; }
       .date-row-fields { flex-direction: column; gap: 0; }
       .date-row-fields > div { margin-bottom: 7px; }
+      .header-logo { width: 54px; height: 54px; }
+      .location-row input, .location-icon-btn { height: 38px; }
+      .location-icon-btn img { width: 32px; height: 32px; }
     }
     footer {
       background: #19aab8;
@@ -248,18 +285,19 @@
       font-size: 1rem;
       letter-spacing: 0.5px;
       border-top: 1.5px solid #19aab8;
-      /* फूटर व टेक्स्ट सेंटर */
       text-align: center;
     }
   </style>
 </head>
 <body>
   <header>
-    <img src="https://github.com/chedenandkumar/Samajik-Diwali/blob/main/Jagar%20Logo.png?raw=true" alt="Logo" style="max-width:80px;">
-    <h1>
-      <span class="headline1">रद्दी संकलनातून</span><br>
-      <span class="headline2">सामाजिक दिवाळी 2025</span>
-    </h1>
+    <div class="header-content">
+      <img class="header-logo" src="https://github.com/chedenandkumar/Samajik-Diwali/blob/main/Jagar%20Logo.png?raw=true" alt="Jagar Logo">
+      <div class="headline-row">
+        <span class="headline1">रद्दी संकलनातून</span>
+        <span class="headline2">सामाजिक दिवाळी 2025</span>
+      </div>
+    </div>
   </header>
   <div class="subtitle">
     उपक्रमाकरीता आपल्याकडील वर्तमान पत्राची रद्दी दान करावयाची असल्यास खालील माहिती भरा.
