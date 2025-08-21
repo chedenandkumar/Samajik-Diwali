@@ -214,7 +214,7 @@
       box-shadow: none;
     }
 
-    /* तारीख व वेळ - एका ओळीत, लेफ्ट अलाइन */
+    /* तारीख व वेळ - एका ओळीत, लेफ्ट अलाइन, mobile वर सुद्धा */
     .date-row-group {
       margin-bottom: 7px;
     }
@@ -246,13 +246,35 @@
       width: 100%;
     }
     .date-row-fields > div {
-      flex: 1;
+      flex: 1 1 0;
       min-width: 0;
       text-align: left;
+      max-width: 50%;
     }
+    .date-row-fields input[type="date"], .date-row-fields select {
+      width: 100%;
+      min-width: 0;
+    }
+
     @media (max-width:600px) {
-      .date-row-fields { flex-direction: column; gap: 0; }
-      .date-row-fields > div { margin-bottom: 7px; }
+      .date-row-fields {
+        flex-direction: row;
+        gap: 8px;
+        align-items: center;
+      }
+      .date-row-fields > div {
+        max-width: 50%;
+      }
+    }
+    @media (max-width:400px) {
+      .date-row-fields {
+        flex-direction: column;
+        gap: 0;
+      }
+      .date-row-fields > div {
+        max-width: 100%;
+        margin-bottom: 7px;
+      }
     }
     footer {
       background: #19aab8;
@@ -302,10 +324,10 @@
         <label for="date">रद्दी संकलित करण्यासाठी तारीख व वेळ सुचवा:</label>
       </div>
       <div class="date-row-fields">
-        <div style="max-width: 50%;">
+        <div>
           <input type="date" id="date" name="date" required>
         </div>
-        <div style="max-width: 50%;">
+        <div>
           <select id="timeslot" name="timeslot"></select>
         </div>
       </div>
