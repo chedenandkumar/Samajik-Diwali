@@ -174,11 +174,13 @@
     .location-row {
       display: flex;
       gap: 6px;
-      align-items: center;
+      align-items: stretch; /* Set to stretch for equal height */
       margin-bottom: 7px;
     }
     .location-row input {
       flex: 1;
+      height: 38px; /* Match the button height */
+      font-size: 1rem;
     }
     .location-icon-btn {
       background: none;
@@ -188,15 +190,15 @@
       cursor: pointer;
       display: flex;
       align-items: center;
-      height: 32px;
-      width: 32px;
+      height: 38px; /* Set same as input for alignment */
+      width: 38px;
     }
     .location-icon-btn img {
       width: 26px;
       height: 26px;
       display: block;
       padding: 0;
-      margin: 0;
+      margin: 0 auto;
       background: none;
       border: none;
       box-shadow: none;
@@ -214,12 +216,16 @@
       letter-spacing: 0.2px;
       color: #000000;
       margin-bottom: 2px;
+      justify-content: flex-start; /* Left align label */
+      text-align: left;
     }
     .date-row-fields {
       display: flex;
       gap: 8px;
       align-items: flex-end;
       margin-bottom: 0;
+      justify-content: flex-start; /* Left align fields */
+      text-align: left;
     }
     .date-row-fields > div {
       flex: 1;
@@ -249,7 +255,7 @@
 </head>
 <body>
   <header>
-    <img src="logo.png" alt="Logo" style="max-width:80px;">
+    <img src="https://github.com/chedenandkumar/Samajik-Diwali/blob/main/Jagar%20Logo.png?raw=true" alt="Logo" style="max-width:80px;">
     <h1>
       <span class="headline1">रद्दी संकलनातून</span><br>
       <span class="headline2">सामाजिक दिवाळी 2025</span>
@@ -341,4 +347,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
